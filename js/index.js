@@ -1,5 +1,5 @@
 // scales/ 目录下所有量表 ID（最小可行版：只支持 SCL-90）
-const SCALE_IDS = ['scl-90'];
+const SCALE_IDS = ['phq-9', 'gad-7', 'scl-90'];
 
 async function loadScales() {
   const container = document.getElementById('scale-list');

@@ -1,0 +1,30 @@
+{
+  "id": "gad-7",
+  "title": "GAD-7 广泛性焦虑量表",
+  "titleEn": "Generalized Anxiety Disorder 7-item scale",
+  "description": "用于筛查广泛性焦虑障碍的简短自评量表，由 Spitzer 等人于 2006 年开发",
+  "instruction": "在过去两周内，以下问题困扰您的频率是？请选择最符合您情况的选项。",
+  "author": "Spitzer, Kroenke, Williams, Lowe",
+  "year": 2006,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 4, "level": "没有焦虑", "color": "#4caf50", "advice": "目前没有明显焦虑症状，继续保持良好的生活状态。" },
+    { "min": 5, "max": 9, "level": "轻度焦虑", "color": "#ff9800", "advice": "存在轻度焦虑症状，建议尝试放松技巧如深呼吸、冥想等。" },
+    { "min": 10, "max": 14, "level": "中度焦虑", "color": "#f44336", "advice": "存在中度焦虑症状，建议咨询心理健康专业人士。" },
+    { "min": 15, "max": 21, "level": "重度焦虑", "color": "#b71c1c", "advice": "存在重度焦虑症状，请尽快寻求专业医疗帮助。" }
+  ]
+}

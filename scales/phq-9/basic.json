@@ -1,0 +1,31 @@
+{
+  "id": "phq-9",
+  "title": "PHQ-9 抑郁症筛查量表",
+  "titleEn": "Patient Health Questionnaire-9",
+  "description": "用于筛查抑郁症状严重程度的自评量表，由 Spitzer 等人于 1999 年开发",
+  "instruction": "在过去两周内，以下问题困扰您的频率是？请选择最符合您情况的选项。",
+  "author": "Spitzer, Kroenke, Williams",
+  "year": 1999,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 4, "level": "没有抑郁", "color": "#4caf50", "advice": "目前没有明显抑郁症状，保持良好的生活习惯即可。" },
+    { "min": 5, "max": 9, "level": "轻度抑郁", "color": "#ff9800", "advice": "存在轻度抑郁症状，建议关注情绪变化，适当运动和社交。" },
+    { "min": 10, "max": 14, "level": "中度抑郁", "color": "#f44336", "advice": "存在中度抑郁症状，建议尽快咨询心理健康专业人士。" },
+    { "min": 15, "max": 19, "level": "中重度抑郁", "color": "#d32f2f", "advice": "存在中重度抑郁症状，强烈建议尽快就医。" },
+    { "min": 20, "max": 27, "level": "重度抑郁", "color": "#b71c1c", "advice": "存在重度抑郁症状，请立即寻求专业医疗帮助。" }
+  ]
+}
