@@ -1,5 +1,7 @@
 // result.js — 结果展示
 
+import { drawRadar } from './radar.js';
+
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
 
@@ -26,6 +28,8 @@ function init() {
     content.innerHTML = renderSingle(data);
   } else if (data.type === 'dimensions') {
     content.innerHTML = renderDimensions(data);
+    // 延迟一帧渲染雷达图，确保 DOM 已插入
+    requestAnimationFrame(() => drawRadarForData(data));
   }
 
   // 清理 sessionStorage
@@ -81,7 +85,9 @@ function renderSingle(data) {
 }
 
 function renderDimensions(data) {
-  const dimCount = data.dimensions.filter(d => d.dimension !== '总分').length;
+  const dimCount = data.dimensions.filter(d => d.dimension !== '其他').length;
+  // 过滤掉"其他"维度用于雷达图
+  const radarDims = data.dimensions.filter(d => d.dimension !== '其他');
 
   const rows = data.dimensions.map(d => `
     <tr>
@@ -96,22 +102,30 @@ function renderDimensions(data) {
   `).join('');
 
   return `
+    <div class="result-overall fade-in">
+      <div class="result-overall-info">
+        <div class="result-label">总平均分</div>
+        <div class="result-score result-score-color" data-color="${escapeHtml(data.overallColor)}">${data.overallMean}</div>
+        <div class="result-level result-level-color" data-color="${escapeHtml(data.overallColor)}">
+          ${escapeHtml(data.overallLevel)}
+        </div>
+        <div class="result-meta">
+          <div class="meta-item">
+            <span class="meta-label">题目数</span>
+            <span class="meta-value">${data.totalItems}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">维度数</span>
+            <span class="meta-value">${dimCount}</span>
+          </div>
+        </div>
+        <div class="result-advice">${escapeHtml(data.overallAdvice)}</div>
+      </div>
+      <div class="result-overall-radar">
+        <div id="radar-container"></div>
+      </div>
+    </div>
     <div class="result-card fade-in">
-      <div class="result-label">总平均分</div>
-      <div class="result-score result-score-color" data-color="${escapeHtml(data.overallColor)}">${data.overallMean}</div>
-      <div class="result-level result-level-color" data-color="${escapeHtml(data.overallColor)}">
-        ${escapeHtml(data.overallLevel)}
-      </div>
-      <div class="result-meta">
-        <div class="meta-item">
-          <span class="meta-label">题目数</span>
-          <span class="meta-value">${data.totalItems}</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-label">维度数</span>
-          <span class="meta-value">${dimCount}</span>
-        </div>
-      </div>
       <table class="dimension-table">
         <thead>
           <tr>
@@ -122,12 +136,30 @@ function renderDimensions(data) {
         </thead>
         <tbody>${rows}</tbody>
       </table>
-      <div class="result-advice">${escapeHtml(data.overallAdvice)}</div>
     </div>
     <p class="text-center text-sm text-muted btn-mt-lg">
       本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
     </p>
   `;
+}
+
+function drawRadarForData(data) {
+  // 过滤掉"其他"维度
+  const dims = data.dimensions.filter(d => d.dimension !== '其他');
+  if (dims.length < 3) return; // 少于 3 个维度不画雷达图
+
+  drawRadar('#radar-container', {
+    dimensions: dims.map(d => d.dimension),
+    values: dims.map(d => d.mean),
+    levels: dims.map(d => d.level),
+    colors: dims.map(d => d.color),
+    minValue: 1,
+    maxValue: 5,
+    fillColor: 'rgba(244,114,182,0.15)',
+    strokeColor: '#f472b6',
+    strokeWidth: 2,
+    levelCount: 4
+  });
 }
 
 function escapeHtml(text) {

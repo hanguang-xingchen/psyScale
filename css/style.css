@@ -271,6 +271,59 @@ body {
   font-weight: 500;
 }
 
+/* ===== 结果页整体布局 ===== */
+.result-overall {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.result-overall-info {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+}
+
+.result-overall-radar {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#radar-container {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* ===== 雷达图 ===== */
+.radar-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.radar-label {
+  transition: font-size 0.15s ease;
+}
+
+.radar-score {
+  transition: font-size 0.15s ease;
+}
+
+.radar-dot {
+  transition: r 0.15s ease;
+}
+
+.radar-polygon {
+  transition: stroke-width 0.15s ease, fill-opacity 0.15s ease;
+}
+
 /* ===== 结果页 ===== */
 .result-card {
   background: var(--white);
@@ -475,6 +528,14 @@ body {
   .dimension-table th,
   .dimension-table td {
     padding: 8px 6px;
+  }
+
+  .result-overall {
+    grid-template-columns: 1fr;
+  }
+
+  #radar-container {
+    max-width: 260px;
   }
 }
 
