@@ -1,0 +1,30 @@
+{
+  "id": "scl-90",
+  "title": "SCL-90 症状自评量表",
+  "titleEn": "Symptom Checklist-90",
+  "description": "广泛用于心理健康评估的自评量表，涵盖9个症状维度及睡眠饮食等附加项目",
+  "instruction": "请根据您最近一周（包括今天）的实际感受，选择最符合您情况的选项。",
+  "author": "Derogatis et al.",
+  "year": 1973,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": true
+  },
+
+  "scoring": {
+    "type": "dimensionSum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 1.0, "max": 2.0, "level": "正常", "color": "#4caf50", "advice": "该维度指标在正常范围内，继续保持良好的心理状态。" },
+    { "min": 2.0, "max": 3.0, "level": "轻度", "color": "#ff9800", "advice": "该维度存在轻度症状，建议关注相关情绪变化，适当调整生活节奏。" },
+    { "min": 3.0, "max": 4.0, "level": "中度", "color": "#f44336", "advice": "该维度存在中度症状，建议尽快咨询心理健康专业人士。" },
+    { "min": 4.0, "max": 5.0, "level": "重度", "color": "#b71c1c", "advice": "该维度症状较重，请尽快寻求专业医疗帮助。" }
+  ]
+}
