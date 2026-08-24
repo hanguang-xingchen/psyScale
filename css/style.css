@@ -590,3 +590,74 @@ body {
   font-weight: 500;
   color: var(--green-600);
 }
+
+/* ===== 社交链接 ===== */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 16px;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.social-link:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.social-qq {
+  background: var(--white);
+  color: var(--gray-600);
+  border-color: var(--gray-200);
+}
+
+.social-qq:hover {
+  background: var(--gray-50);
+  border-color: var(--pink-200);
+}
+
+.social-bbs {
+  background: var(--pink-50);
+  color: var(--pink-600);
+  border-color: var(--pink-100);
+}
+
+.social-bbs:hover {
+  background: var(--pink-100);
+}
+
+.social-author {
+  background: var(--white);
+  color: var(--gray-500);
+  border-color: var(--gray-200);
+}
+
+.social-author:hover {
+  background: var(--gray-50);
+  color: var(--gray-700);
+}
+
+@media (max-width: 480px) {
+  .social-links {
+    gap: 8px;
+    padding: 16px 8px;
+  }
+
+  .social-link {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
