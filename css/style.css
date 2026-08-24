@@ -572,3 +572,21 @@ body {
     border: 1px solid #ddd;
   }
 }
+
+/* ===== 下载按钮 ===== */
+#btn-download {
+  background: var(--green-50);
+  border-top: 1px solid var(--green-100);
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+#btn-download:hover {
+  background: var(--green-100);
+}
+
+#btn-download span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--green-600);
+}

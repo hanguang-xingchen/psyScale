@@ -65,20 +65,43 @@ function scoreDimensionSum(answers, items, config) {
   const overallMean = totalItems > 0 ? Math.round((totalScore / totalItems) * 100) / 100 : 0;
   const overallInterp = findInterpretation(overallMean, config.interpretation);
 
-  // 计算各维度因子均分
+  // 阳性项目统计：单项 ≥ 2 视为阳性（SCL-90 标准）
+  let positiveItemCount = 0;
+  let positiveTotalScore = 0;
+  items.forEach(item => {
+    const qid = String(item.q_id);
+    const val = answers[qid];
+    if (val !== undefined && val >= 2) {
+      positiveItemCount += 1;
+      positiveTotalScore += val;
+    }
+  });
+  const positiveMean = positiveItemCount > 0
+    ? Math.round((positiveTotalScore / positiveItemCount) * 100) / 100
+    : 0;
+
+  // 计算各维度因子均分 + 超阈值维度列表
   const results = [];
+  const factorOverThreshold = [];
+  // 推导阈值：取 interpretation 中 min=2.0 的 entry，否则默认 2.0
+  const threshold = config.interpretation.find(i => i.min === 2)?.min ?? 2.0;
+
   for (const [name, data] of Object.entries(dimensions)) {
     const mean = data.count > 0 ? data.score / data.count : 0;
     const interp = findInterpretation(mean, config.interpretation);
+    const roundedMean = Math.round(mean * 100) / 100;
     results.push({
       dimension: name,
       score: data.score,
       count: data.count,
-      mean: Math.round(mean * 100) / 100,
+      mean: roundedMean,
       level: interp.level,
       color: interp.color,
       advice: interp.advice
     });
+    if (mean >= threshold) {
+      factorOverThreshold.push(name);
+    }
   }
 
   return {
@@ -87,7 +110,11 @@ function scoreDimensionSum(answers, items, config) {
     overallLevel: overallInterp.level,
     overallColor: overallInterp.color,
     overallAdvice: overallInterp.advice,
+    totalScore,
     totalItems,
+    positiveItemCount,
+    positiveMean,
+    factorOverThreshold,
     dimensions: results
   };
 }

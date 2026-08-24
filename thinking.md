@@ -203,6 +203,43 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 - PDF 报告导出
 - 更多量表（SCL-90、MMPI、EPQ 等）
 
+## 下载报告功能
+
+结果页底部提供"下载报告"按钮，点击后生成 JSON 文件并触发浏览器下载。
+
+### 模块分工
+
+| 模块 | 职责 |
+|---|---|
+| `scorer.js` | 计分 + 阳性指标计算（`positiveItemCount`、`positiveMean`、`factorOverThreshold`） |
+| `report.js` | 组装 JSON + 触发下载（`downloadResult()`） |
+| `result.js` | 渲染下载按钮 + 事件委托 |
+
+### JSON 格式
+
+```json
+{
+  "version": 1,
+  "date": "2026-08-24",
+  "scale": "SCL-90 症状自评量表",
+  "scaleId": "scl-90",
+  "factors": { "躯体化": 1.50, "强迫症状": 2.80, ... },
+  "summary": {
+    "totalScore": 174,
+    "totalMean": 1.93,
+    "positiveItemCount": 35,
+    "positiveMean": 2.41,
+    "factorOverThreshold": ["强迫症状", "偏执", "其它"]
+  }
+}
+```
+
+单维度量表（PHQ-9、GAD-7）无 `factors` 字段，`summary` 中为 `totalScore`、`mean`、`level`。
+
+### 阳性项目定义
+
+SCL-90 中单项评分 ≥ 2（"很轻"及以上）视为阳性项目。阳性均分 = 阳性项目总分 / 阳性项目数。
+
 ## SCL-90 维度与题目映射
 
 SCL-90 共 90 题，分为 9 个症状维度：

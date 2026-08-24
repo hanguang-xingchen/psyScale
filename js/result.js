@@ -1,6 +1,7 @@
 // result.js — 结果展示
 
 import { drawRadar } from './radar.js';
+import { downloadResult } from './report.js';
 
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
@@ -42,6 +43,13 @@ function init() {
   document.getElementById('btn-retry').addEventListener('click', () => {
     window.location.href = `scale.html?scale=${encodeURIComponent(scaleId)}`;
   });
+
+  // 下载报告按钮（事件委托，因为按钮是 innerHTML 动态插入的）
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#btn-download')) {
+      downloadResult(data, scaleId, data.title);
+    }
+  });
 }
 
 function applyDynamicColors() {
@@ -81,6 +89,9 @@ function renderSingle(data) {
     <p class="text-center text-sm text-muted btn-mt-lg">
       本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
     </p>
+    <div class="action-bar" id="btn-download" style="justify-content: center; cursor: pointer;">
+      <span>📥 下载报告</span>
+    </div>
   `;
 }
 
@@ -140,6 +151,9 @@ function renderDimensions(data) {
     <p class="text-center text-sm text-muted btn-mt-lg">
       本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
     </p>
+    <div class="action-bar" id="btn-download" style="justify-content: center; cursor: pointer;">
+      <span>📥 下载报告</span>
+    </div>
   `;
 }
 
