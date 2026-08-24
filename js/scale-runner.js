@@ -30,25 +30,86 @@ async function init() {
   bindEvents();
 }
 
+/**
+ * 解析 CSV 文本为题目数组（RFC 4180 兼容）
+ * 支持：引号内逗号、引号内换行、引号转义（"" → "）
+ */
 function parseCsv(text, source) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim());
+  const tokens = tokenizeCsv(text);
+  if (tokens.length === 0) return [];
 
+  const headers = tokens[0];
   const optCols = headers.filter(h => h.startsWith(source.optionPrefix));
   const valCols = headers.filter(h => h.startsWith(source.valuePrefix));
 
-  return lines.slice(1).map(line => {
-    const cols = line.split(',').map(c => c.trim());
+  return tokens.slice(1).map(cols => {
     const row = {};
-    headers.forEach((h, i) => { row[h] = cols[i]; });
+    headers.forEach((h, i) => { row[h] = cols[i] || ''; });
 
     row.options = optCols.map((col, idx) => ({
-      text: row[col],
+      text: row[col] || '',
       value: parseInt(row[valCols[idx]], 10)
     }));
 
     return row;
   });
+}
+
+/**
+ * 将 CSV 文本拆分为 token 行（每行是字符串数组）
+ */
+function tokenizeCsv(text) {
+  const lines = [];
+  let current = [];
+  let field = '';
+  let inQuotes = false;
+  let i = 0;
+
+  while (i < text.length) {
+    const ch = text[i];
+
+    if (inQuotes) {
+      if (ch === '"') {
+        // 引号转义: "" → "
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 2;
+        } else {
+          inQuotes = false;
+          i++;
+        }
+      } else {
+        field += ch;
+        i++;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+        i++;
+      } else if (ch === ',') {
+        current.push(field);
+        field = '';
+        i++;
+      } else if (ch === '\n' || ch === '\r') {
+        // 处理 \r\n
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        current.push(field);
+        field = '';
+        if (current.some(c => c !== '')) lines.push(current);
+        current = [];
+        i++;
+      } else {
+        field += ch;
+        i++;
+      }
+    }
+  }
+
+  // 最后一个字段
+  current.push(field);
+  if (current.some(c => c !== '')) lines.push(current);
+
+  return lines;
 }
 
 function renderHeader() {
@@ -155,6 +216,18 @@ function bindEvents() {
 }
 
 async function handleSubmit() {
+  // 提交前检查所有题目是否已答
+  const unanswered = items.filter(item => answers[item.q_id] === undefined);
+  if (unanswered.length > 0) {
+    const qids = unanswered.map(i => i.q_id).join('、');
+    alert(`还有 ${unanswered.length} 题未作答（第 ${qids} 题），请完成所有题目后再提交。`);
+    // 跳转到第一道未答题
+    currentIndex = items.indexOf(unanswered[0]);
+    renderCurrentQuestion();
+    updateProgress();
+    return;
+  }
+
   // 调用计分
   const result = await import('./scorer.js').then(m => m.score(answers, items, config));
 

@@ -59,7 +59,19 @@ psyScale/
 
 ## 量表发现机制
 
-主页通过读取 `scales/index.json`（维护量表 ID 列表）动态发现所有可用量表，然后加载每个量表的 `meta.json` 或 `basic.json` 中的轻量信息生成卡片。
+主页通过读取 `scales/index.json`（维护量表 ID 列表）动态发现所有可用量表，然后加载每个量表的 `basic.json` 中的轻量信息生成卡片。
+
+```
+scales/index.json  →  ["phq-9", "gad-7", "scl-90"]
+       ↓
+index.js fetch → 动态渲染卡片
+```
+
+新增量表只需两步：
+1. 在 `scales/` 下创建目录并添加 `basic.json` + `items.csv`
+2. 在 `scales/index.json` 中添加新 ID
+
+无需修改任何 JS 代码。
 
 ## 页面间通信
 

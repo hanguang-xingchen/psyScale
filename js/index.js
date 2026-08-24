@@ -1,11 +1,19 @@
-// scales/ 目录下所有量表 ID（最小可行版：只支持 SCL-90）
-const SCALE_IDS = ['phq-9', 'gad-7', 'scl-90'];
-
+// 从 scales/index.json 动态加载量表 ID 列表
 async function loadScales() {
   const container = document.getElementById('scale-list');
   const loading = document.getElementById('loading');
 
-  for (const id of SCALE_IDS) {
+  // 动态发现量表 ID
+  let scaleIds;
+  try {
+    const indexRes = await fetch('scales/index.json');
+    scaleIds = await indexRes.json();
+  } catch {
+    // 兜底：手动维护的最小列表
+    scaleIds = ['phq-9', 'gad-7', 'scl-90'];
+  }
+
+  for (const id of scaleIds) {
     try {
       const res = await fetch(`scales/${id}/basic.json`);
       const config = await res.json();
