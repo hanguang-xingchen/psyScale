@@ -601,45 +601,57 @@ body {
 }
 
 .btn-social {
-  font-size: 0.9rem;
-  padding: 10px 18px;
-  border: 1.5px solid transparent;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn-social:active {
+  transform: scale(0.97);
 }
 
 .btn-qq {
-  background: var(--white);
-  color: var(--gray-600);
-  border-color: var(--gray-200);
-  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, #4a90d9, #357abd);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(74, 144, 217, 0.3);
 }
 
 .btn-qq:hover {
-  background: var(--gray-50);
-  border-color: var(--pink-300);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #357abd, #2868a8);
+  box-shadow: 0 4px 12px rgba(74, 144, 217, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-bbs {
-  background: linear-gradient(135deg, var(--pink-300), var(--pink-400));
+  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
   color: var(--white);
-  box-shadow: 0 2px 8px rgba(244, 114, 182, 0.25);
+  box-shadow: 0 2px 8px rgba(244, 114, 182, 0.3);
 }
 
 .btn-bbs:hover {
-  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
-  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.35);
+  background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-author {
-  background: var(--gray-50);
-  color: var(--gray-600);
-  border-color: var(--gray-200);
-  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, var(--gray-500), var(--gray-600));
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
 }
 
 .btn-author:hover {
-  background: var(--gray-100);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--gray-600), var(--gray-700));
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 480px) {
@@ -650,6 +662,6 @@ body {
 
   .btn-social {
     font-size: 0.85rem;
-    padding: 8px 14px;
+    padding: 8px 16px;
   }
 }
