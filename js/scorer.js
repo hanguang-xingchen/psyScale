@@ -24,18 +24,16 @@ function scoreSum(answers, items, config) {
   const mean = totalItems > 0 ? totalScore / totalItems : 0;
   const roundedMean = Math.round(mean * 100) / 100;
 
-  // 先用总分查解读表，如果没有匹配再用均分
-  const interpByTotal = findInterpretation(totalScore, config.interpretation);
-  const interpByMean = findInterpretation(mean, config.interpretation);
+  const interp = findInterpretation(totalScore, config.interpretation);
 
   return {
     type: 'single',
     totalScore,
     totalItems,
     mean: roundedMean,
-    level: interpByMean.level || interpByTotal.level,
-    color: interpByMean.color || interpByTotal.color,
-    advice: interpByMean.advice || interpByTotal.advice
+    level: interp.level,
+    color: interp.color,
+    advice: interp.advice
   };
 }
 
