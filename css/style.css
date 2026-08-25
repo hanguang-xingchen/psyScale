@@ -64,7 +64,7 @@ body {
 
 /* ===== 通用布局 ===== */
 .container {
-  max-width: 720px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px;
 }
@@ -93,7 +93,6 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 20px;
-  margin-bottom: 16px;
   border: 1px solid var(--pink-100);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -209,6 +208,14 @@ body {
   font-size: 0.9rem;
   color: var(--gray-600);
   line-height: 1.7;
+}
+
+/* 量表卡片网格 */
+#scale-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .question-card {
