@@ -1,0 +1,30 @@
+{
+  "id": "ces-d",
+  "title": "CES-D 流调中心抑郁量表",
+  "titleEn": "Center for Epidemiologic Studies Depression Scale",
+  "description": "用于筛查抑郁症状的自评量表，由 Radloff 于 1977 年开发，广泛用于流行病学调查",
+  "instruction": "以下描述的是人们有时会有的一些感受。请根据你在过去一周内的实际情况，选择最符合每个感受出现频率的选项。",
+  "author": "Radloff",
+  "year": 1977,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 15, "level": "没有抑郁", "color": "#4caf50", "advice": "目前没有明显抑郁症状，继续保持良好的生活状态。" },
+    { "min": 16, "max": 20, "level": "轻度抑郁", "color": "#ff9800", "advice": "存在轻度抑郁症状，建议关注情绪变化，适当运动和社交。" },
+    { "min": 21, "max": 25, "level": "中度抑郁", "color": "#f44336", "advice": "存在中度抑郁症状，建议尽快咨询心理健康专业人士。" },
+    { "min": 26, "max": 60, "level": "重度抑郁", "color": "#b71c1c", "advice": "存在重度抑郁症状，请尽快寻求专业医疗帮助。" }
+  ]
+}
