@@ -1,0 +1,30 @@
+{
+  "id": "k10",
+  "title": "K10 心理困扰量表",
+  "titleEn": "Kessler Psychological Distress Scale",
+  "description": "用于筛查非特异性心理困扰的简短自评量表，由 Kessler 等人开发，广泛用于公共卫生调查",
+  "instruction": "在过去 30 天内，你有多频繁地经历以下感受？请选择最符合你情况的选项。",
+  "author": "Kessler et al.",
+  "year": 2002,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 10, "max": 19, "level": "低困扰", "color": "#4caf50", "advice": "心理困扰水平较低，继续保持良好的生活状态。" },
+    { "min": 20, "max": 24, "level": "轻度困扰", "color": "#ff9800", "advice": "存在轻度心理困扰，建议适当关注自己的情绪变化。" },
+    { "min": 25, "max": 29, "level": "中度困扰", "color": "#f44336", "advice": "存在中度心理困扰，建议咨询心理健康专业人士。" },
+    { "min": 30, "max": 50, "level": "重度困扰", "color": "#b71c1c", "advice": "心理困扰程度较高，请尽快寻求专业医疗帮助。" }
+  ]
+}

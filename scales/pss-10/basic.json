@@ -1,0 +1,29 @@
+{
+  "id": "pss-10",
+  "title": "PSS-10 感知压力量表",
+  "titleEn": "Perceived Stress Scale (10-item)",
+  "description": "用于评估个体对生活中压力源感知程度的简短量表，由 Cohen 等人开发",
+  "instruction": "在过去一个月中，你有多频繁地有以下感受或想法？请选择最符合你情况的选项。",
+  "author": "Cohen, Kamarck, Mermelstein",
+  "year": 1983,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 13, "level": "低压力", "color": "#4caf50", "advice": "感知压力水平较低，继续保持良好的应对方式。" },
+    { "min": 14, "max": 26, "level": "中等压力", "color": "#ff9800", "advice": "感知压力处于中等水平，可以尝试放松技巧如深呼吸、冥想等来缓解。" },
+    { "min": 27, "max": 40, "level": "高压力", "color": "#b71c1c", "advice": "感知压力较高，建议调整生活节奏，必要时寻求专业支持。" }
+  ]
+}

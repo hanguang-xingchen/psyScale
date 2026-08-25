@@ -1,0 +1,29 @@
+{
+  "id": "who-5",
+  "title": "WHO-5 幸福感指数",
+  "titleEn": "WHO-5 Well-Being Index",
+  "description": "由世界卫生组织开发的简短幸福感评估工具，用于测量主观心理健康状态",
+  "instruction": "请根据过去两周的实际情况，选择最符合你感受的选项。",
+  "author": "世界卫生组织 (WHO)",
+  "year": 1998,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 12, "level": "幸福感较低", "color": "#b71c1c", "advice": "近期幸福感较低，建议关注自己的情绪状态，必要时寻求专业支持。" },
+    { "min": 13, "max": 17, "level": "幸福感一般", "color": "#ff9800", "advice": "幸福感处于中等水平，可以尝试增加积极的日常活动来提升状态。" },
+    { "min": 18, "max": 25, "level": "幸福感良好", "color": "#4caf50", "advice": "近期幸福感良好，继续当前的生活方式。" }
+  ]
+}
