@@ -52,9 +52,21 @@ psyScale/
     ├── gad-7/
     │   ├── basic.json
     │   └── items.csv
-    └── scl-90/
+    ├── scl-90/
+    │   ├── basic.json
+    │   └── items.csv       # SCL-90 90题 + 10维度
+    ├── ces-d/
+    │   ├── basic.json
+    │   └── items.csv       # CES-D 20题
+    ├── who-5/
+    │   ├── basic.json
+    │   └── items.csv       # WHO-5 5题
+    ├── k10/
+    │   ├── basic.json
+    │   └── items.csv       # K10 10题
+    └── pss-10/
         ├── basic.json
-        └── items.csv       # SCL-90 90题 + 10维度
+        └── items.csv       # PSS-10 10题
 ```
 
 ## 量表发现机制
@@ -192,8 +204,9 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 
 ### 近期（当前版本）
 
-- 3-5 个常见量表（PHQ-9、GAD-7、SAS 等）
+- 7 个常见量表（PHQ-9、GAD-7、SCL-90、CES-D、WHO-5、K10、PSS-10）
 - 前端计分，即时出结果
+- JSON 报告下载
 - 无持久化
 
 ### 未来
