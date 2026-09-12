@@ -1,7 +1,10 @@
 // scale-runner.js — 通用答题引擎
 
+import { saveDraft, loadDraft, clearDraft, saveResult } from './db.js';
+
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
+const isResume = params.get('resume') === '1';
 
 if (!scaleId) {
   window.location.href = 'index.html';
@@ -10,30 +13,33 @@ if (!scaleId) {
 
 let config = null;
 let items = [];
-let answers = {};
 let currentIndex = 0;
 
 async function init() {
-  // 加载 basic.json
   const configRes = await fetch(`scales/${scaleId}/basic.json`);
   config = await configRes.json();
 
-  // 加载 items.csv
   const csvRes = await fetch(`scales/${scaleId}/${config.source.file}`);
   const csvText = await csvRes.text();
   items = parseCsv(csvText, config.source);
 
-  // 渲染页面
+  if (isResume) {
+    const draft = await loadDraft(scaleId);
+    if (draft) {
+      currentIndex = draft.currentIndex || 0;
+    }
+  } else {
+    // 新答题：先清除可能残留的旧草稿，再初始化
+    await clearDraft(scaleId);
+    await saveDraft({ scaleId, answers: {}, currentIndex: 0, timestamp: Date.now() });
+  }
+
   renderHeader();
   renderCurrentQuestion();
   updateProgress();
   bindEvents();
 }
 
-/**
- * 解析 CSV 文本为题目数组（RFC 4180 兼容）
- * 支持：引号内逗号、引号内换行、引号转义（"" → "）
- */
 function parseCsv(text, source) {
   const tokens = tokenizeCsv(text);
   if (tokens.length === 0) return [];
@@ -55,9 +61,6 @@ function parseCsv(text, source) {
   });
 }
 
-/**
- * 将 CSV 文本拆分为 token 行（每行是字符串数组）
- */
 function tokenizeCsv(text) {
   const lines = [];
   let current = [];
@@ -70,7 +73,6 @@ function tokenizeCsv(text) {
 
     if (inQuotes) {
       if (ch === '"') {
-        // 引号转义: "" → "
         if (text[i + 1] === '"') {
           field += '"';
           i += 2;
@@ -91,7 +93,6 @@ function tokenizeCsv(text) {
         field = '';
         i++;
       } else if (ch === '\n' || ch === '\r') {
-        // 处理 \r\n
         if (ch === '\r' && text[i + 1] === '\n') i++;
         current.push(field);
         field = '';
@@ -105,7 +106,6 @@ function tokenizeCsv(text) {
     }
   }
 
-  // 最后一个字段
   current.push(field);
   if (current.some(c => c !== '')) lines.push(current);
 
@@ -123,7 +123,7 @@ function renderHeader() {
   }
 }
 
-function renderCurrentQuestion() {
+async function renderCurrentQuestion() {
   const container = document.getElementById('questions-container');
   container.innerHTML = '';
 
@@ -131,8 +131,8 @@ function renderCurrentQuestion() {
   const card = document.createElement('div');
   card.className = 'question-card fade-in';
 
-  // 恢复之前选中的选项
-  const selectedVal = answers[item.q_id];
+  const draft = await loadDraft(scaleId);
+  const selectedVal = draft?.answers?.[item.q_id];
 
   const optionsHtml = item.options.map((opt) => `
     <label class="option-item${selectedVal === opt.value ? ' selected' : ''}" data-qid="${item.q_id}" data-val="${opt.value}">
@@ -157,12 +157,9 @@ function showQuestion(index) {
   updateProgress();
 }
 
-function renderQuestions() {
-  renderCurrentQuestion();
-}
-
-function updateProgress() {
-  const answered = Object.keys(answers).length;
+async function updateProgress() {
+  const draft = await loadDraft(scaleId);
+  const answered = draft ? Object.keys(draft.answers).length : 0;
   const total = items.length;
   const pct = total > 0 ? Math.round(((currentIndex + 1) / total) * 100) : 0;
 
@@ -171,7 +168,7 @@ function updateProgress() {
 
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === total - 1;
-  const hasAnswer = answers[items[currentIndex].q_id] !== undefined;
+  const hasAnswer = draft?.answers?.[items[currentIndex].q_id] !== undefined;
 
   document.getElementById('btn-prev').disabled = isFirst;
   document.getElementById('btn-next').disabled = !hasAnswer;
@@ -179,32 +176,32 @@ function updateProgress() {
 }
 
 function bindEvents() {
-  // 选项点击
-  document.getElementById('questions-container').addEventListener('click', (e) => {
+  document.getElementById('questions-container').addEventListener('click', async (e) => {
     const label = e.target.closest('.option-item');
     if (!label) return;
 
     const qid = label.dataset.qid;
     const val = parseInt(label.dataset.val, 10);
 
-    // 清除同题其他选中
     label.closest('.option-list').querySelectorAll('.option-item.selected').forEach(el => {
       el.classList.remove('selected');
     });
     label.classList.add('selected');
 
-    answers[qid] = val;
+    const draft = await loadDraft(scaleId) || { scaleId, answers: {}, currentIndex: 0 };
+    draft.answers[qid] = val;
+    draft.timestamp = Date.now();
+    await saveDraft(draft);
+
     updateProgress();
   });
 
-  // 上一题
   document.getElementById('btn-prev').addEventListener('click', () => {
     if (currentIndex > 0) {
       showQuestion(currentIndex - 1);
     }
   });
 
-  // 下一题 / 提交
   document.getElementById('btn-next').addEventListener('click', () => {
     const isLast = currentIndex === items.length - 1;
     if (isLast) {
@@ -216,29 +213,29 @@ function bindEvents() {
 }
 
 async function handleSubmit() {
-  // 提交前检查所有题目是否已答
+  const draft = await loadDraft(scaleId);
+  const answers = draft?.answers || {};
+
   const unanswered = items.filter(item => answers[item.q_id] === undefined);
   if (unanswered.length > 0) {
     const qids = unanswered.map(i => i.q_id).join('、');
     alert(`还有 ${unanswered.length} 题未作答（第 ${qids} 题），请完成所有题目后再提交。`);
-    // 跳转到第一道未答题
     currentIndex = items.indexOf(unanswered[0]);
     renderCurrentQuestion();
     updateProgress();
     return;
   }
 
-  // 调用计分
-  const result = await import('./scorer.js').then(m => m.score(answers, items, config));
+  const result = await import('./scorer.js').then(m => m.score(scaleId, items, config));
 
-  // 存储结果
-  sessionStorage.setItem('psyScale_result', JSON.stringify({
+  await saveResult(config.id, {
     scaleId: config.id,
     title: config.title,
     ...result
-  }));
+  });
 
-  // 跳转结果页
+  await clearDraft(scaleId);
+
   window.location.href = `result.html?scale=${encodeURIComponent(config.id)}`;
 }
 

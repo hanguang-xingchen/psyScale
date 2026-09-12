@@ -18,12 +18,14 @@
 basic.json  →  量表是谁、怎么算分、分数怎么解读（声明层）
 items.csv   →  每题长什么样、选项是什么、各得几分（数据层）
 scale.html  →  答题界面骨架（展示层）
-scorer.js   →  计分引擎（逻辑层）
+db.js       →  IndexedDB 存储层：答题草稿持久化 + 计分结果存取
+scorer.js   →  计分引擎：从 DB 读答案并计算（逻辑层）
 ```
 
 - JSON 只管"规则"，不管具体题目
 - CSV 只管"题目数据"，不管怎么计分
 - HTML 只管"页面结构"，不管业务逻辑
+- db.js 只管"存取"，不管内容和逻辑
 - JS 只管"怎么运行"，不管量表内容
 
 ### 3. 为后端校验预留接口
@@ -34,17 +36,19 @@ scorer.js   →  计分引擎（逻辑层）
 
 ```
 psyScale/
-├── index.html              # 主页：量表列表入口
+├── index.html              # 主页：量表列表入口 + 未完成量表恢复弹窗
 ├── scale.html              # 量表答题页（所有量表共用）
 ├── result.html             # 结果展示页（所有量表共用）
 ├── css/
 │   └── style.css           # 全局样式（粉色治愈风，响应式）
 ├── js/
-│   ├── index.js            # 主页逻辑：加载量表列表、渲染卡片
-│   ├── scale-runner.js     # 通用答题引擎：逐题渲染、收集答案
-│   ├── scorer.js           # 计分引擎：根据配置计算分数
+│   ├── index.js            # 主页逻辑：加载量表列表、渲染卡片、检测未完成草稿
+│   ├── scale-runner.js     # 通用答题引擎：逐题渲染、收集答案、写入 IndexedDB
+│   ├── scorer.js           # 计分引擎：从 IndexedDB 读取答案并计算分数
+│   ├── db.js               # IndexedDB 存储层：答题草稿与计分结果的读写
 │   ├── result.js           # 结果页逻辑：读取结果数据、展示解读
-│   └── radar.js            # 纯 SVG 雷达图模块（零依赖，可独立迁移）
+│   ├── radar.js            # 纯 SVG 雷达图模块（零依赖，可独立迁移）
+│   └── report.js           # JSON 报告下载
 └── scales/
     ├── phq-9/
     │   ├── basic.json      # PHQ-9 全局声明
@@ -64,9 +68,12 @@ psyScale/
     ├── k10/
     │   ├── basic.json
     │   └── items.csv       # K10 10题
-    └── pss-10/
+    ├── pss-10/
+    │   ├── basic.json
+    │   └── items.csv       # PSS-10 10题
+    └── ses/
         ├── basic.json
-        └── items.csv       # PSS-10 10题
+        └── items.csv       # SES 10题
 ```
 
 ## 量表发现机制
@@ -89,8 +96,58 @@ index.js fetch → 动态渲染卡片
 
 | 页面跳转 | 传参方式 |
 |---|---|
-| index → scale | URL 参数：`scale.html?scale=phq9` |
-| scale → result | `sessionStorage` 存完整结果 JSON，URL 仅带 `scale` |
+| index → scale | URL 参数：`scale.html?scale=phq9`（恢复时追加 `&resume=1`） |
+| scale → result | IndexedDB 存计分结果（`result:` 前缀），URL 仅带 `scale` |
+
+## IndexedDB 自动存档
+
+答题过程中，用户每选一个选项，`scale-runner.js` 立即将当前状态写入 IndexedDB（由 `db.js` 封装）。提交时 `scorer.js` 直接从 IndexedDB 读取答案进行计分，计分结果也存入 IndexedDB，结果页刷新后仍可查看。
+
+### 数据模型
+
+```
+DB: psyScale (v1)
+ObjectStore: draft
+
+答题草稿：
+Key: scaleId (string)
+Value: {
+  scaleId: string,
+  answers: { [qid]: value, ... },
+  currentIndex: number,
+  timestamp: number
+}
+
+计分结果：
+Key: "result:" + scaleId (string)
+Value: {
+  scaleId: string,
+  title: string,
+  type: "single" | "dimensions",
+  totalScore / overallMean / dimensions / ...
+}
+```
+
+### 数据流
+
+```
+用户选答案 → saveDraft() 写入 IndexedDB
+提交 → scorer 从 IndexedDB 读 answers → 计分 → saveResult() 存结果
+结果页 → loadResult() 从 IndexedDB 读取（刷新不丢失）
+恢复 → index.html 检测 DB 有草稿 → 弹窗提示 → scale.html?resume=1 恢复进度
+```
+
+### 降级策略
+
+不支持 IndexedDB 的浏览器自动降级到 `sessionStorage`，API 完全一致（`db.js` 内部判断）。降级后刷新页面会丢失进度，但答题流程本身不受影响。
+
+### 恢复流程
+
+1. 打开 `index.html` 时，`index.js` 调用 `peekDraft()` 检查 DB 是否有未完成草稿
+2. 若有，弹出 `<dialog>` 提示用户"你有一个未完成的 XX 量表"，显示相对时间
+3. 用户点击"继续答题"→ 跳转 `scale.html?scale=xxx&resume=1`
+4. `scale-runner.js` 检测到 `resume=1`，从 DB 恢复 `currentIndex` 和已选答案
+5. 用户点击"放弃"→ 调用 `clearDraft()` 清除 DB，正常进入首页
 
 ## 数据格式详解
 
@@ -147,9 +204,12 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 
 ## 计分引擎工作原理
 
+`scorer.js` 接收 `scaleId`，内部通过 `db.js` 从 IndexedDB 读取答案数据，然后根据配置计算分数。
+
 ### 单维度（sum）
 
 ```
+从 IndexedDB 读取 answers
 总分 = Σ 各题选中选项对应的 val
 因子均分 = 总分 / 题目数
 查 interpretation 表 → 等级 + 建议
@@ -158,6 +218,7 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 ### 多维度（dimensionSum）
 
 ```
+从 IndexedDB 读取 answers
 按 dimension 列分组：
   躯体化维度分 = Σ 躯体化题的 val
   焦虑维度分 = Σ 焦虑题的 val
@@ -204,10 +265,11 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 
 ### 近期（当前版本）
 
-- 7 个常见量表（PHQ-9、GAD-7、SCL-90、CES-D、WHO-5、K10、PSS-10）
+- 8 个常见量表（PHQ-9、GAD-7、SCL-90、CES-D、WHO-5、K10、PSS-10、SES）
 - 前端计分，即时出结果
 - JSON 报告下载
-- 无持久化
+- IndexedDB 自动存档 + 未完成量表恢复
+- 结果持久化（IndexedDB，刷新不丢失）
 
 ### 未来
 

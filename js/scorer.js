@@ -1,6 +1,12 @@
 // scorer.js — 计分引擎
 
-export function score(answers, items, config) {
+import { loadDraft } from './db.js';
+
+export async function score(scaleId, items, config) {
+  const draft = await loadDraft(scaleId);
+  if (!draft) throw new Error('未找到答题数据');
+  const answers = draft.answers;
+
   const scoringType = config.scoring.type;
 
   if (scoringType === 'sum') {

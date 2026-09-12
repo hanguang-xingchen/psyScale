@@ -1,15 +1,55 @@
-// 从 scales/index.json 动态加载量表 ID 列表
+// index.js — 主页
+
+async function init() {
+  if (await checkResume()) return;
+  await loadScales();
+}
+
+async function checkResume() {
+  const { peekDraft } = await import('./db.js');
+  const draft = await peekDraft();
+  if (!draft) return false;
+
+  const dialog = document.getElementById('resume-dialog');
+  const titleEl = document.getElementById('resume-scale-title');
+
+  try {
+    const res = await fetch(`scales/${draft.scaleId}/basic.json`);
+    const config = await res.json();
+    titleEl.textContent = config.title;
+  } catch {
+    titleEl.textContent = draft.scaleId;
+  }
+
+  const timeEl = document.getElementById('resume-time');
+  timeEl.textContent = formatRelativeTime(draft.timestamp);
+
+  dialog.showModal();
+
+  return new Promise((resolve) => {
+    document.getElementById('btn-resume').onclick = () => {
+      dialog.close();
+      window.location.href = `scale.html?scale=${encodeURIComponent(draft.scaleId)}&resume=1`;
+      resolve(true);
+    };
+    document.getElementById('btn-abandon').onclick = async () => {
+      dialog.close();
+      const { clearDraft } = await import('./db.js');
+      await clearDraft(draft.scaleId);
+      resolve(false);
+    };
+  });
+}
+
 async function loadScales() {
   const container = document.getElementById('scale-list');
   const loading = document.getElementById('loading');
 
-  // 动态发现量表 ID
   let scaleIds;
   try {
     const indexRes = await fetch('scales/index.json');
     scaleIds = await indexRes.json();
   } catch {
-    // 兜底：手动维护的最小列表
     scaleIds = ['phq-9', 'gad-7', 'scl-90'];
   }
 
@@ -49,10 +89,22 @@ function createCard(config) {
   return card;
 }
 
+function formatRelativeTime(ts) {
+  if (!ts) return '刚刚';
+  const diff = Date.now() - ts;
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return '刚刚';
+  if (minutes < 60) return `${minutes} 分钟前`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} 小时前`;
+  const days = Math.floor(hours / 24);
+  return `${days} 天前`;
+}
+
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
 }
 
-document.addEventListener('DOMContentLoaded', loadScales);
+document.addEventListener('DOMContentLoaded', init);

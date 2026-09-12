@@ -6,7 +6,7 @@
   <meta name="keywords" content="开源,心理量表,心理测评,PHQ-9,GAD-7,SCL-90,免费,开源心理学工具">
   <meta name="description" content="psyScale — 开源的心理学多量表评估工具，支持 PHQ-9、GAD-7、SCL-90 等量表，即开即用，无需后端。">
   <title>psyScale — 开源心理学多量表评估</title>
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <div class="container">
@@ -37,6 +37,19 @@
     </div>
   </div>
 
-  <script type="module" src="js/index.js"></script>
+  <dialog id="resume-dialog" class="resume-dialog">
+    <div class="resume-dialog-content">
+      <div class="resume-dialog-icon">📝</div>
+      <p class="resume-dialog-title">你有一个未完成的量表</p>
+      <p class="resume-dialog-desc"><strong id="resume-scale-title"></strong></p>
+      <p class="resume-dialog-time" id="resume-time"></p>
+      <div class="resume-dialog-actions">
+        <button id="btn-abandon" class="btn btn-secondary">放弃</button>
+        <button id="btn-resume" class="btn btn-primary">继续答题</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/index.js?v=7"></script>
 </body>
 </html>

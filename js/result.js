@@ -2,14 +2,15 @@
 
 import { drawRadar } from './radar.js';
 import { downloadResult } from './report.js';
+import { loadResult } from './db.js';
 
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
 
-function init() {
-  const resultData = sessionStorage.getItem('psyScale_result');
+async function init() {
+  const data = await loadResult(scaleId);
 
-  if (!resultData) {
+  if (!data) {
     document.getElementById('result-content').innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">📋</div>
@@ -20,7 +21,6 @@ function init() {
     return;
   }
 
-  const data = JSON.parse(resultData);
   document.getElementById('result-title').textContent = `${data.title} — 结果`;
 
   const content = document.getElementById('result-content');
@@ -32,9 +32,6 @@ function init() {
     // 延迟一帧渲染雷达图，确保 DOM 已插入
     requestAnimationFrame(() => drawRadarForData(data));
   }
-
-  // 清理 sessionStorage
-  sessionStorage.removeItem('psyScale_result');
 
   // 应用动态颜色
   applyDynamicColors();
