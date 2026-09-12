@@ -663,6 +663,18 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-github {
+  background: linear-gradient(135deg, #24292e, #1b1f23);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(36, 41, 46, 0.3);
+}
+
+.btn-github:hover {
+  background: linear-gradient(135deg, #1b1f23, #0d1117);
+  box-shadow: 0 4px 12px rgba(36, 41, 46, 0.4);
+  transform: translateY(-2px);
+}
+
 @media (max-width: 480px) {
   .social-links {
     gap: 8px;
