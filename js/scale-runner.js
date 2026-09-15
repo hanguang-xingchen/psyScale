@@ -35,6 +35,7 @@ async function init() {
   }
 
   renderHeader();
+  initAnswerSheet();
   renderCurrentQuestion();
   updateProgress();
   bindEvents();
@@ -173,9 +174,53 @@ async function updateProgress() {
   document.getElementById('btn-prev').disabled = isFirst;
   document.getElementById('btn-next').disabled = !hasAnswer;
   document.getElementById('btn-next').textContent = isLast ? '提交' : '下一题';
+
+  updateAnswerSheet();
+}
+
+function initAnswerSheet() {
+  const grid = document.getElementById('answer-sheet-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < items.length; i++) {
+    const el = document.createElement('div');
+    el.className = 'answer-sheet-item';
+    el.dataset.index = i;
+    el.textContent = i + 1;
+    grid.appendChild(el);
+  }
+}
+
+async function updateAnswerSheet() {
+  const draft = await loadDraft(scaleId);
+  const answers = draft?.answers || {};
+  const cells = document.querySelectorAll('.answer-sheet-item');
+  cells.forEach((cell, i) => {
+    cell.classList.remove('answered', 'current');
+    if (answers[items[i].q_id] !== undefined) {
+      cell.classList.add('answered');
+    }
+    if (i === currentIndex) {
+      cell.classList.add('current');
+    }
+  });
 }
 
 function bindEvents() {
+  // 答题卡折叠切换
+  document.getElementById('answer-sheet-toggle').addEventListener('click', () => {
+    const sheet = document.getElementById('answer-sheet');
+    const toggle = document.getElementById('answer-sheet-toggle');
+    sheet.classList.toggle('collapsed');
+    toggle.textContent = sheet.classList.contains('collapsed') ? '▶' : '◀';
+  });
+
+  // 答题卡点击跳转（仅已答题目可跳转）
+  document.getElementById('answer-sheet-grid').addEventListener('click', (e) => {
+    const item = e.target.closest('.answer-sheet-item');
+    if (!item || !item.classList.contains('answered')) return;
+    showQuestion(parseInt(item.dataset.index, 10));
+  });
+
   document.getElementById('questions-container').addEventListener('click', async (e) => {
     const label = e.target.closest('.option-item');
     if (!label) return;

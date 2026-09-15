@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="keywords" content="开源,心理量表,心理测评,答题">
   <title>答题 — 开源 psyScale</title>
-  <link rel="stylesheet" href="css/style.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
   <div class="container">
@@ -33,6 +33,20 @@
     </div>
   </div>
 
-  <script type="module" src="js/scale-runner.js?v=6"></script>
+  <!-- 答题卡（桌面端右侧可折叠） -->
+  <aside class="answer-sheet collapsed" id="answer-sheet">
+    <button class="answer-sheet-toggle" id="answer-sheet-toggle" title="答题卡">▶</button>
+    <div class="answer-sheet-body">
+      <div class="answer-sheet-header">答题卡</div>
+      <div class="answer-sheet-grid" id="answer-sheet-grid"></div>
+      <div class="answer-sheet-legend">
+        <span><span class="legend-dot dot-answered"></span> 已答</span>
+        <span><span class="legend-dot dot-current"></span> 当前</span>
+        <span><span class="legend-dot dot-empty"></span> 未答</span>
+      </div>
+    </div>
+  </aside>
+
+  <script type="module" src="js/scale-runner.js?v=9"></script>
 </body>
 </html>

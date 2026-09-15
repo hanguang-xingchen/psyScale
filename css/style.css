@@ -713,6 +713,172 @@ body {
   }
 }
 
+/* ===== 答题卡（桌面端右侧折叠面板） ===== */
+:root {
+  --answer-sheet-w: 330px;
+}
+
+.answer-sheet {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  transition: right 0.3s ease;
+}
+
+.answer-sheet.collapsed {
+  right: calc(-1 * var(--answer-sheet-w));
+}
+
+.answer-sheet-toggle {
+  width: 28px;
+  height: 56px;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  background: var(--white);
+  color: var(--pink-400);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.answer-sheet-toggle:hover {
+  background: var(--pink-50);
+  color: var(--pink-600);
+}
+
+.answer-sheet-body {
+  background: var(--white);
+  border-radius: 12px 0 0 12px;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.1);
+  padding: 18px 16px;
+  width: var(--answer-sheet-w);
+}
+
+.answer-sheet-header {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.answer-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+
+.answer-sheet-item {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  cursor: default;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  background: var(--gray-100);
+  color: var(--gray-400);
+}
+
+.answer-sheet-item.answered {
+  background: var(--green-100);
+  color: var(--green-600);
+  border-color: var(--green-500);
+  cursor: pointer;
+}
+
+.answer-sheet-item.answered:hover {
+  background: var(--green-50);
+}
+
+.answer-sheet-item.current {
+  border-color: var(--pink-400);
+  background: var(--pink-100);
+  color: var(--pink-600);
+  font-weight: 700;
+}
+
+.answer-sheet-item.current.answered {
+  border-color: var(--pink-400);
+  background: var(--pink-100);
+  color: var(--pink-600);
+}
+
+.answer-sheet-legend {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+.dot-answered {
+  background: var(--green-100);
+  border: 1.5px solid var(--green-500);
+}
+
+.dot-current {
+  background: var(--pink-100);
+  border: 1.5px solid var(--pink-400);
+}
+
+.dot-empty {
+  background: var(--gray-100);
+  border: 1.5px solid var(--gray-200);
+}
+
+/* 大屏幕再加宽 */
+@media (min-width: 1024px) {
+  :root {
+    --answer-sheet-w: 420px;
+  }
+  .answer-sheet-item {
+    font-size: 0.9rem;
+  }
+  .answer-sheet-grid {
+    gap: 7px;
+  }
+  .answer-sheet-body {
+    padding: 22px 20px;
+  }
+  .answer-sheet-header {
+    font-size: 1rem;
+  }
+  .answer-sheet-toggle {
+    height: 60px;
+  }
+}
+
+/* 移动端隐藏答题卡 */
+@media (max-width: 480px) {
+  .answer-sheet {
+    display: none;
+  }
+}
+
 /* ===== 恢复答题弹窗 ===== */
 .resume-dialog {
   border: none;
