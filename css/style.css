@@ -777,6 +777,14 @@ body {
   transform: translateY(-2px);
 }
 
+.star-prompt {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  padding: 10px 16px 0;
+  line-height: 1.6;
+}
+
 @media (max-width: 480px) {
   .social-links {
     gap: 8px;
