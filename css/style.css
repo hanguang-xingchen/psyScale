@@ -306,6 +306,7 @@ body {
 #radar-container {
   width: 100%;
   max-width: 320px;
+  position: relative;
 }
 
 /* ===== 雷达图 ===== */
@@ -319,16 +320,41 @@ body {
   transition: font-size 0.15s ease;
 }
 
-.radar-score {
-  transition: font-size 0.15s ease;
-}
-
 .radar-dot {
   transition: r 0.15s ease;
 }
 
 .radar-polygon {
   transition: stroke-width 0.15s ease, fill-opacity 0.15s ease;
+}
+
+.radar-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 8px 12px;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+.radar-tooltip-dim {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.radar-tooltip-score {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+.radar-tooltip-level {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 /* ===== 结果页 ===== */

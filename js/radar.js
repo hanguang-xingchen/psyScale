@@ -88,6 +88,7 @@ export function drawRadar(container, config) {
   // 绘制轴线和轴标签
   const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   axisGroup.setAttribute('class', 'radar-axes');
+  const labels = [];
 
   for (let i = 0; i < n; i++) {
     const angle = startAngle + i * angleStep;
@@ -121,25 +122,8 @@ export function drawRadar(container, config) {
     text.setAttribute('data-dim-index', i);
     text.textContent = dimensions[i];
 
-    // 分数标签
-    const scoreR = maxR + 32;
-    const sx = cx + scoreR * Math.cos(angle);
-    const sy = cy + scoreR * Math.sin(angle);
-
-    const scoreText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    scoreText.setAttribute('x', sx);
-    scoreText.setAttribute('y', sy);
-    scoreText.setAttribute('text-anchor', 'middle');
-    scoreText.setAttribute('dominant-baseline', 'central');
-    scoreText.setAttribute('fill', colors[i]);
-    scoreText.setAttribute('font-size', '10');
-    scoreText.setAttribute('font-weight', '600');
-    scoreText.setAttribute('class', 'radar-score');
-    scoreText.textContent = values[i];
-    scoreText.setAttribute('data-dim-index', i);
-
     axisGroup.appendChild(text);
-    axisGroup.appendChild(scoreText);
+    labels.push(text);
   }
 
   svg.appendChild(axisGroup);
@@ -163,6 +147,7 @@ export function drawRadar(container, config) {
   dataGroup.appendChild(fillPolygon);
 
   // 数据点
+  const dots = [];
   values.forEach((v, i) => {
     const p = pointCoords(i, v);
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -176,39 +161,92 @@ export function drawRadar(container, config) {
     circle.setAttribute('data-dim-index', i);
     circle.style.cursor = 'pointer';
 
-    // hover 交互
-    circle.addEventListener('mouseenter', () => highlightAxis(i, true));
-    circle.addEventListener('mouseleave', () => highlightAxis(i, false));
-
     dataGroup.appendChild(circle);
+    dots.push(circle);
   });
 
   svg.appendChild(dataGroup);
   el.appendChild(svg);
 
-  // 高亮/取消高亮
-  function highlightAxis(index, on) {
-    const labels = el.querySelectorAll('.radar-label');
-    const scores = el.querySelectorAll('.radar-score');
+  // 浮动信息浮层
+  const tooltip = document.createElement('div');
+  tooltip.className = 'radar-tooltip';
+  tooltip.style.display = 'none';
+  tooltip.innerHTML = `
+    <div class="radar-tooltip-dim"></div>
+    <div class="radar-tooltip-score"></div>
+    <div class="radar-tooltip-level"></div>
+  `;
+  el.appendChild(tooltip);
+
+  // 鼠标移动跟踪（浮层定位）
+  el.addEventListener('mousemove', (e) => {
+    if (tooltip.style.display === 'none') return;
+    const rect = el.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    // 默认右下偏移
+    let tx = x + 14;
+    let ty = y - 10;
+
+    // 右侧溢出则翻转到左侧
+    if (tx + tooltip.offsetWidth + 10 > rect.width) {
+      tx = x - tooltip.offsetWidth - 14;
+    }
+    // 底部溢出则翻转到上方
+    if (ty + tooltip.offsetHeight + 10 > rect.height) {
+      ty = y - tooltip.offsetHeight - 10;
+    }
+
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top = ty + 'px';
+  });
+
+  // hover 交互
+  dots.forEach((circle, i) => {
+    circle.addEventListener('mouseenter', () => {
+      tooltip.querySelector('.radar-tooltip-dim').textContent = dimensions[i];
+      tooltip.querySelector('.radar-tooltip-score').textContent = '得分: ' + values[i];
+      const levelEl = tooltip.querySelector('.radar-tooltip-level');
+      levelEl.textContent = levels[i];
+      levelEl.style.color = colors[i];
+      tooltip.style.display = 'block';
+      highlightDim(i, true);
+    });
+
+    circle.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      highlightDim(i, false);
+    });
+
+    // 也让轴标签 hover 触发展示
+    labels[i].addEventListener('mouseenter', () => {
+      tooltip.querySelector('.radar-tooltip-dim').textContent = dimensions[i];
+      tooltip.querySelector('.radar-tooltip-score').textContent = '得分: ' + values[i];
+      const levelEl = tooltip.querySelector('.radar-tooltip-level');
+      levelEl.textContent = levels[i];
+      levelEl.style.color = colors[i];
+      tooltip.style.display = 'block';
+      highlightDim(i, true);
+    });
+
+    labels[i].addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      highlightDim(i, false);
+    });
+  });
+
+  // 高亮/取消高亮某个维度
+  function highlightDim(index, on) {
     const dots = el.querySelectorAll('.radar-dot');
     const polygon = el.querySelector('.radar-polygon');
-
     if (on) {
       if (dots[index]) dots[index].setAttribute('r', '6');
-      if (scores[index]) {
-        scores[index].setAttribute('font-size', '12');
-      }
-      if (polygon) {
-        polygon.setAttribute('stroke-width', strokeWidth + 1);
-      }
+      if (polygon) polygon.setAttribute('stroke-width', strokeWidth + 1);
     } else {
       if (dots[index]) dots[index].setAttribute('r', '4');
-      if (scores[index]) {
-        scores[index].setAttribute('font-size', '10');
-      }
-      if (polygon) {
-        polygon.setAttribute('stroke-width', strokeWidth);
-      }
+      if (polygon) polygon.setAttribute('stroke-width', strokeWidth);
     }
   }
 }
