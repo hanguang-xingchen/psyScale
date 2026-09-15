@@ -665,18 +665,6 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-bbs {
-  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
-  color: var(--white);
-  box-shadow: 0 2px 8px rgba(244, 114, 182, 0.3);
-}
-
-.btn-bbs:hover {
-  background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
-  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.4);
-  transform: translateY(-2px);
-}
-
 .btn-author {
   background: linear-gradient(135deg, var(--gray-500), var(--gray-600));
   color: var(--white);
