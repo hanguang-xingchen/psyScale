@@ -357,6 +357,94 @@ body {
   margin-top: 2px;
 }
 
+/* ===== 测评须知页 ===== */
+.notice-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+.notice-status-ok {
+  background: var(--green-50);
+  color: var(--green-600);
+}
+
+.notice-status-warn {
+  background: var(--red-50);
+  color: var(--red-600);
+}
+
+.notice-status-icon {
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.notice-browser {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+}
+
+.browser-info-icon {
+  font-size: 0.9rem;
+}
+
+.browser-warn {
+  color: var(--orange-500);
+  font-weight: 500;
+}
+
+.notice-body {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--pink-100);
+  padding: 24px;
+}
+
+.notice-section {
+  margin-bottom: 20px;
+}
+
+.notice-section:last-child {
+  margin-bottom: 0;
+}
+
+.notice-subtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--pink-600);
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 3px solid var(--pink-400);
+}
+
+.notice-desc {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.notice-desc:last-child {
+  margin-bottom: 0;
+}
+
+.notice-desc strong {
+  color: var(--gray-800);
+}
+
 /* ===== 结果页 ===== */
 .result-card {
   background: var(--white);

@@ -81,7 +81,7 @@ function createCard(config) {
   `;
 
   const link = document.createElement('a');
-  link.href = `scale.html?scale=${encodeURIComponent(config.id)}`;
+  link.href = `notice.html?scale=${encodeURIComponent(config.id)}`;
   link.className = 'btn btn-primary btn-full btn-mt';
   link.textContent = '开始答题';
 
