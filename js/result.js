@@ -1,14 +1,16 @@
 // result.js — 结果展示
 
 import { drawRadar } from './radar.js';
-import { downloadResult } from './report.js';
+import { downloadResult, downloadResultWithDetail, downloadCsvDetail } from './report.js';
 import { loadResult } from './db.js';
 
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
+let resultData = null; // 全局保存以便下载事件使用
 
 async function init() {
   const data = await loadResult(scaleId);
+  resultData = data;
 
   if (!data) {
     document.getElementById('result-content').innerHTML = `
@@ -41,11 +43,32 @@ async function init() {
     window.location.href = `scale.html?scale=${encodeURIComponent(scaleId)}`;
   });
 
-  // 下载报告按钮（事件委托，因为按钮是 innerHTML 动态插入的）
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('#btn-download')) {
-      downloadResult(data, scaleId, data.title);
+  // 下载主按钮：切换下拉菜单
+  document.getElementById('btn-download-main').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const menu = document.getElementById('download-menu');
+    menu.classList.toggle('show');
+  });
+
+  // 下载选项点击
+  document.getElementById('download-menu').addEventListener('click', async (e) => {
+    const option = e.target.closest('.download-option');
+    if (!option) return;
+    const type = option.dataset.type;
+
+    if (type === 'report') {
+      downloadResult(resultData, scaleId, resultData.title);
+    } else if (type === 'detail-report') {
+      downloadResultWithDetail(resultData, scaleId, resultData.title);
+    } else if (type === 'detail-csv') {
+      await downloadCsvDetail(resultData, scaleId, resultData.title);
     }
+    document.getElementById('download-menu').classList.remove('show');
+  });
+
+  // 点击别处关闭下拉菜单
+  document.addEventListener('click', () => {
+    document.getElementById('download-menu').classList.remove('show');
   });
 }
 
@@ -86,9 +109,6 @@ function renderSingle(data) {
     <p class="text-center text-sm text-muted btn-mt-lg">
       本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
     </p>
-    <div class="action-bar" id="btn-download" style="justify-content: center; cursor: pointer;">
-      <span>📥 下载报告</span>
-    </div>
   `;
 }
 
@@ -148,9 +168,6 @@ function renderDimensions(data) {
     <p class="text-center text-sm text-muted btn-mt-lg">
       本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
     </p>
-    <div class="action-bar" id="btn-download" style="justify-content: center; cursor: pointer;">
-      <span>📥 下载报告</span>
-    </div>
   `;
 }
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="keywords" content="开源,心理量表,心理测评,评估结果">
   <title>评估结果 — 开源 psyScale</title>
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
   <div class="container">
@@ -32,12 +32,21 @@
     </div>
     <div class="star-prompt">⭐ 如果对你有帮助，欢迎在 GitHub 给个 Star</div>
 
+    <div class="download-area" id="download-area">
+      <button class="btn btn-primary" id="btn-download-main">📥 下载</button>
+      <div class="download-menu" id="download-menu">
+        <div class="download-option" data-type="report">📄 下载报告（标准）</div>
+        <div class="download-option" data-type="detail-report">📄 下载报告（含明细）</div>
+        <div class="download-option" data-type="detail-csv">📋 下载明细（CSV）</div>
+      </div>
+    </div>
+
     <div class="action-bar">
       <a href="index.html" class="btn btn-secondary btn-flex">返回主页</a>
       <button id="btn-retry" class="btn btn-primary btn-flex">重新答题</button>
     </div>
   </div>
 
-  <script type="module" src="js/result.js?v=6"></script>
+  <script type="module" src="js/result.js?v=7"></script>
 </body>
 </html>

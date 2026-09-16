@@ -600,6 +600,51 @@ body {
   color: var(--pink-600);
 }
 
+/* ===== 下载下拉菜单 ===== */
+.download-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.download-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--pink-100);
+  overflow: hidden;
+  z-index: 50;
+  min-width: 220px;
+}
+
+.download-menu.show {
+  display: block;
+}
+
+.download-option {
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: background 0.12s ease;
+  white-space: nowrap;
+}
+
+.download-option:hover {
+  background: var(--pink-50);
+  color: var(--pink-600);
+}
+
+.download-option:not(:last-child) {
+  border-bottom: 1px solid var(--gray-100);
+}
+
 /* ===== 空状态 ===== */
 .empty-state {
   text-align: center;

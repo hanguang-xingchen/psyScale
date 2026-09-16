@@ -273,10 +273,14 @@ async function handleSubmit() {
 
   const result = await import('./scorer.js').then(m => m.score(scaleId, items, config));
 
+  // 按题目顺序构建答卷数组
+  const answerValues = items.map(item => answers[item.q_id]);
+
   await saveResult(config.id, {
     scaleId: config.id,
     title: config.title,
-    ...result
+    ...result,
+    answers: answerValues
   });
 
   await clearDraft(scaleId);

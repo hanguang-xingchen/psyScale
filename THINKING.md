@@ -277,6 +277,7 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 - 结果持久化（IndexedDB，刷新不丢失）
 - SCL-90 雷达图 hover 详情浮层
 - 桌面端右侧可折叠圆形答题卡（自适应大屏加宽）
+- 下载下拉菜单：JSON 报告（含原始答卷数组）+ CSV 明细导出
 
 ### 未来
 
@@ -287,15 +288,20 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 
 ## 下载报告功能
 
-结果页底部提供"下载报告"按钮，点击后生成 JSON 文件并触发浏览器下载。
+结果页提供"📥 下载"下拉菜单，支持三种导出格式：
+
+- **下载报告（标准）**：评分结论，不含原始答卷（`downloadResult()`）
+- **下载报告（含明细）**：评分结论 + `answers` 原始答卷数组（`downloadResultWithDetail()`）
+- **下载明细（CSV）**：每题题号、题目、选项文本与分值，适合 Excel 分析（`downloadCsvDetail()`）
 
 ### 模块分工
 
 | 模块 | 职责 |
 |---|---|
-| `scorer.js` | 计分 + 阳性指标计算（`positiveItemCount`、`positiveMean`、`factorOverThreshold`） |
-| `report.js` | 组装 JSON + 触发下载（`downloadResult()`） |
-| `result.js` | 渲染下载按钮 + 事件委托 |
+| `scorer.js` | 计分 + 阳性指标计算 |
+| `report.js` | 三种导出函数：`downloadResult()` / `downloadResultWithDetail()` / `downloadCsvDetail()` |
+| `result.js` | 渲染下拉菜单 + 事件委托 + 调用下载函数 |
+| `scale-runner.js` | 提交时构建 `answers` 数组并存入 IndexedDB |
 
 ### JSON 格式
 
@@ -305,6 +311,7 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
   "date": "2026-08-24",
   "scale": "SCL-90 症状自评量表",
   "scaleId": "scl-90",
+  "answers": [1, 2, 0, 3, ...],
   "factors": { "躯体化": 1.50, "强迫症状": 2.80, ... },
   "summary": {
     "totalScore": 174,
@@ -316,7 +323,16 @@ q_id,text,dimension,opt_0,opt_1,opt_2,opt_3,val_0,val_1,val_2,val_3
 }
 ```
 
-单维度量表（PHQ-9、GAD-7）无 `factors` 字段，`summary` 中为 `totalScore`、`mean`、`level`。
+- `answers` 为数组，下标 +1 = 题号，`null` 表示未答
+- 单维度量表（PHQ-9、GAD-7）无 `factors` 字段，`summary` 中为 `totalScore`、`mean`、`level`
+
+### CSV 明细格式
+
+```csv
+题号,题目,选项,分值
+1,做事时提不起兴趣,有几天,1
+2,情绪低落,一半以上天数,2
+```
 
 ### 阳性项目定义
 
