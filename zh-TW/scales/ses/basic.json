@@ -1,0 +1,30 @@
+{
+  "id": "ses",
+  "title": "Rosenberg 自尊量表",
+  "titleEn": "Rosenberg Self-Esteem Scale (SES)",
+  "description": "由 Morris Rosenberg 於 1965 年開發的自尊測量工具，廣泛用於心理學研究和臨床實務，屬於公共領域",
+  "instruction": "請根據你對自己的實際情況，選擇最符合每個陳述的選項。",
+  "author": "Morris Rosenberg",
+  "year": 1965,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 10, "level": "自尊水平較低", "color": "#b71c1c", "advice": "自尊水平較低，可能經常對自己感到不滿意。建議關注自己的優點和成就，必要時尋求專業支持。" },
+    { "min": 11, "max": 20, "level": "自尊水平一般", "color": "#ff9800", "advice": "自尊水平處於中等，有時對自己滿意，有時不太滿意。可以嘗試多肯定自己，培養積極的自我對話。" },
+    { "min": 21, "max": 25, "level": "自尊水平良好", "color": "#4caf50", "advice": "自尊水平良好，對自己有基本的肯定態度。繼續保持積極的自我認知。" },
+    { "min": 26, "max": 30, "level": "自尊水平很高", "color": "#2e7d32", "advice": "自尊水平很高，對自己有充分的信心和接納。繼續維持這種積極的自我狀態。" }
+  ]
+}

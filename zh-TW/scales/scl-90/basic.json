@@ -1,0 +1,30 @@
+{
+  "id": "scl-90",
+  "title": "SCL-90 症狀自評量表",
+  "titleEn": "Symptom Checklist-90",
+  "description": "廣泛用於心理健康評估的自評量表，涵蓋 9 個症狀構面及睡眠飲食等附加項目",
+  "instruction": "請根據您最近一週（包括今天）的實際感受，選擇最符合您情況的選項。",
+  "author": "Derogatis et al.",
+  "year": 1973,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": true
+  },
+
+  "scoring": {
+    "type": "dimensionSum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 1.0, "max": 2.0, "level": "正常", "color": "#4caf50", "advice": "該構面指標在正常範圍內，繼續保持良好的心理狀態。" },
+    { "min": 2.0, "max": 3.0, "level": "輕度", "color": "#ff9800", "advice": "該構面存在輕度症狀，建議關注相關情緒變化，適當調整生活節奏。" },
+    { "min": 3.0, "max": 4.0, "level": "中度", "color": "#f44336", "advice": "該構面存在中度症狀，建議儘快諮詢心理健康專業人士。" },
+    { "min": 4.0, "max": 5.0, "level": "重度", "color": "#b71c1c", "advice": "該構面症狀較重，請儘快尋求專業醫療協助。" }
+  ]
+}

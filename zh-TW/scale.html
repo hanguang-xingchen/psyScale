@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="開源,心理量表,心理測評,答題">
+  <title>答題 — 開源 psyScale</title>
+  <link rel="stylesheet" href="../css/style.css?v=10">
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回首頁</a>
+
+    <div class="page-header">
+      <h1 id="scale-title">載入中…</h1>
+      <p id="scale-description"></p>
+    </div>
+
+    <div id="scale-instruction" class="scale-instruction" style="display: none;"></div>
+
+    <div id="progress-text" class="progress-text"></div>
+    <div id="progress-bar" class="progress-bar">
+      <div id="progress-fill" class="progress-bar-fill"></div>
+    </div>
+
+    <div id="questions-container">
+      <!-- 動態渲染題目 -->
+    </div>
+
+    <div class="action-bar">
+      <button id="btn-prev" class="btn btn-secondary btn-flex" disabled>上一題</button>
+      <button id="btn-next" class="btn btn-primary btn-flex" disabled>下一題</button>
+    </div>
+  </div>
+
+  <!-- 答題卡（桌面端右側可摺疊） -->
+  <aside class="answer-sheet collapsed" id="answer-sheet">
+    <button class="answer-sheet-toggle" id="answer-sheet-toggle" title="答題卡">▶</button>
+    <div class="answer-sheet-body">
+      <div class="answer-sheet-header">答題卡</div>
+      <div class="answer-sheet-grid" id="answer-sheet-grid"></div>
+      <div class="answer-sheet-legend">
+        <span><span class="legend-dot dot-answered"></span> 已答</span>
+        <span><span class="legend-dot dot-current"></span> 目前</span>
+        <span><span class="legend-dot dot-empty"></span> 未答</span>
+      </div>
+    </div>
+  </aside>
+
+  <script type="module" src="../js/scale-runner.js?v=9"></script>
+</body>
+</html>

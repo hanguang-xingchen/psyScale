@@ -1,0 +1,30 @@
+{
+  "id": "k10",
+  "title": "K10 心理困擾量表",
+  "titleEn": "Kessler Psychological Distress Scale",
+  "description": "用於篩檢非特異性心理困擾的簡短自評量表，由 Kessler 等人開發，廣泛用於公共衛生調查",
+  "instruction": "在過去 30 天內，你有多頻繁地經歷以下感受？請選擇最符合你情況的選項。",
+  "author": "Kessler et al.",
+  "year": 2002,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 10, "max": 19, "level": "低困擾", "color": "#4caf50", "advice": "心理困擾水平較低，繼續保持良好的生活狀態。" },
+    { "min": 20, "max": 24, "level": "輕度困擾", "color": "#ff9800", "advice": "存在輕度心理困擾，建議適當關注自己的情緒變化。" },
+    { "min": 25, "max": 29, "level": "中度困擾", "color": "#f44336", "advice": "存在中度心理困擾，建議諮詢心理健康專業人士。" },
+    { "min": 30, "max": 50, "level": "重度困擾", "color": "#b71c1c", "advice": "心理困擾程度較高，請儘快尋求專業醫療協助。" }
+  ]
+}

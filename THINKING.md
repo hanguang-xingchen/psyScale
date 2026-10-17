@@ -356,3 +356,69 @@ SCL-90 共 90 题，分为 9 个症状维度：
 | 其他（睡眠、饮食等） | 7 | — |
 
 > 具体题目归属见 `scales/scl-90/items.csv` 的 `dimension` 列。
+
+## 多语言架构（zh-TW 繁体中文支持）
+
+### 设计决策
+
+采用 **子路由隔离** 方案：`zh-TW/` 目录下放置独立的 HTML 和 `scales/` 数据，JS/CSS 共享自上级目录。
+
+```
+/
+├── index.html, scale.html, result.html, notice.html   ← 简体中文
+├── css/style.css
+├── js/*.js                                             ← 共享
+├── scales/                                             ← 简体量表数据
+│
+└── zh-TW/
+    ├── index.html, scale.html, result.html, notice.html  ← 繁体中文
+    └── scales/                                           ← 繁体量表数据
+        ├── phq-9/basic.json  ← language: "zh-TW"
+        └── ...
+```
+
+### JS 文案国际化
+
+所有 JS 文件中硬编码的中文文案统一抽到 `js/i18n.js`，通过路径感知自动切换：
+
+```js
+// i18n.js — 路径感知
+const LANG = window.location.pathname.includes('/zh-TW/') ? 'zh-TW' : 'zh-CN';
+
+// 使用方式
+import { t } from './i18n.js';
+document.getElementById('btn').textContent = t('submit');
+document.getElementById('progress').textContent = t('questionProgress', { current: 5, total: 20 });
+```
+
+- `scale-runner.js`、`result.js`、`index.js`、`scorer.js` 均通过 `import { t }` 引用
+- `index.js` 动态设置 `<html lang>` 属性
+- HTML 模板中的静态文案在各语言 HTML 文件中分别维护
+
+### 翻译范围
+
+| 层级 | 翻译内容 |
+|---|---|
+| HTML 模板 | 页面标题、按钮文案、提示文字、社交链接文本 |
+| `basic.json` | title、description、instruction、interpretation 中的 level/advice |
+| `items.csv` | 题目文本和选项文本（待翻译） |
+| JS 文案 | 通过 `i18n.js` 统一管理，自动跟随路径切换 |
+
+### 台湾用语适配
+
+翻译时注意贴近台湾心理学和医学术语习惯：
+- "维度" → "構面"（台湾心理学标准用语）
+- "提交" → "送出"（台湾网页常用词）
+- "抑郁" → "抑鬱"（繁体字形）
+- "感知压力" → "知覺壓力"（台湾译法）
+- 心理援助热线改为台湾地区专线（1980 全台心理諮商專線）
+- "数据" → "資料"（台湾用语）
+- "程序" → "程式"（台湾用语）
+
+### 扩展更多语言
+
+如需新增语言（如 `en/`、`zh-HK/`），照抄 `zh-TW/` 模式即可：
+1. 创建语言子目录
+2. 复制 HTML 文件并翻译静态文案
+3. 复制 `scales/` 并翻译 `basic.json` 和 `items.csv`
+4. JS/CSS 自动兼容（通过 `i18n.js` 路径感知）

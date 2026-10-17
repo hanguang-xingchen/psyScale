@@ -1,0 +1,31 @@
+{
+  "id": "phq-9",
+  "title": "PHQ-9 抑鬱症篩檢量表",
+  "titleEn": "Patient Health Questionnaire-9",
+  "description": "用於篩檢抑鬱症狀嚴重程度的自評量表，由 Spitzer 等人於 1999 年開發",
+  "instruction": "在過去兩週內，以下問題困擾您的頻率是？請選擇最符合您情況的選項。",
+  "author": "Spitzer, Kroenke, Williams",
+  "year": 1999,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 4, "level": "沒有抑鬱", "color": "#4caf50", "advice": "目前沒有明顯抑鬱症狀，保持良好的生活習慣即可。" },
+    { "min": 5, "max": 9, "level": "輕度抑鬱", "color": "#ff9800", "advice": "存在輕度抑鬱症狀，建議關注情緒變化，適當運動和社交。" },
+    { "min": 10, "max": 14, "level": "中度抑鬱", "color": "#f44336", "advice": "存在中度抑鬱症狀，建議儘快諮詢心理健康專業人士。" },
+    { "min": 15, "max": 19, "level": "中重度抑鬱", "color": "#d32f2f", "advice": "存在中重度抑鬱症狀，強烈建議儘快就醫。" },
+    { "min": 20, "max": 27, "level": "重度抑鬱", "color": "#b71c1c", "advice": "存在重度抑鬱症狀，請立即尋求專業醫療協助。" }
+  ]
+}

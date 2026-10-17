@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="開源,心理量表,心理測評,評估結果">
+  <title>評估結果 — 開源 psyScale</title>
+  <link rel="stylesheet" href="../css/style.css?v=11">
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回首頁</a>
+
+    <div class="page-header">
+      <h1 id="result-title">評估結果</h1>
+    </div>
+
+    <div id="result-content">
+      <!-- 動態渲染結果 -->
+    </div>
+
+    <div class="social-links">
+      <a href="https://qm.qq.com/q/hxxcsAb5L4" target="_blank" rel="noopener" class="btn btn-social btn-qq">
+        💬 抑鬱症救救群
+      </a>
+      <a href="https://hanguangxingchen.top" target="_blank" rel="noopener" class="btn btn-social btn-author">
+        👤 作者首頁
+      </a>
+      <a href="https://github.com/hanguang-xingchen/psyScale" target="_blank" rel="noopener" class="btn btn-social btn-github">
+        ⭐ Star 程式碼倉庫
+      </a>
+    </div>
+    <div class="star-prompt">⭐ 如果有幫助到你，歡迎在 GitHub 給個 Star</div>
+
+    <div class="download-area" id="download-area">
+      <button class="btn btn-primary" id="btn-download-main">📥 下載</button>
+      <div class="download-menu" id="download-menu">
+        <div class="download-option" data-type="report">📄 下載報告（標準）</div>
+        <div class="download-option" data-type="detail-report">📄 下載報告（含明細）</div>
+        <div class="download-option" data-type="detail-csv">📋 下載明細（CSV）</div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <a href="index.html" class="btn btn-secondary btn-flex">返回首頁</a>
+      <button id="btn-retry" class="btn btn-primary btn-flex">重新答題</button>
+    </div>
+  </div>
+
+  <script type="module" src="../js/result.js?v=7"></script>
+</body>
+</html>

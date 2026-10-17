@@ -1,0 +1,30 @@
+{
+  "id": "ces-d",
+  "title": "CES-D 流行病學研究中心抑鬱量表",
+  "titleEn": "Center for Epidemiologic Studies Depression Scale",
+  "description": "用於篩檢抑鬱症狀的自評量表，由 Radloff 於 1977 年開發，廣泛用於流行病學調查",
+  "instruction": "以下描述的是人們有時會有的一些感受。請根據你在過去一週內的實際情況，選擇最符合每個感受出現頻率的選項。",
+  "author": "Radloff",
+  "year": 1977,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 15, "level": "沒有抑鬱", "color": "#4caf50", "advice": "目前沒有明顯抑鬱症狀，繼續保持良好的生活狀態。" },
+    { "min": 16, "max": 20, "level": "輕度抑鬱", "color": "#ff9800", "advice": "存在輕度抑鬱症狀，建議關注情緒變化，適當運動和社交。" },
+    { "min": 21, "max": 25, "level": "中度抑鬱", "color": "#f44336", "advice": "存在中度抑鬱症狀，建議儘快諮詢心理健康專業人士。" },
+    { "min": 26, "max": 60, "level": "重度抑鬱", "color": "#b71c1c", "advice": "存在重度抑鬱症狀，請儘快尋求專業醫療協助。" }
+  ]
+}

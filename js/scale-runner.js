@@ -1,6 +1,7 @@
 // scale-runner.js — 通用答题引擎
 
 import { saveDraft, loadDraft, clearDraft, saveResult } from './db.js';
+import { t } from './i18n.js';
 
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
@@ -143,7 +144,7 @@ async function renderCurrentQuestion() {
   `).join('');
 
   card.innerHTML = `
-    <div class="question-index">第 ${currentIndex + 1} 题 / 共 ${items.length} 题</div>
+    <div class="question-index">${t('questionProgress', { current: currentIndex + 1, total: items.length })}</div>
     <div class="question-text">${escapeHtml(item.text)}</div>
     <div class="option-list">${optionsHtml}</div>
   `;
@@ -164,7 +165,7 @@ async function updateProgress() {
   const total = items.length;
   const pct = total > 0 ? Math.round(((currentIndex + 1) / total) * 100) : 0;
 
-  document.getElementById('progress-text').textContent = `第 ${currentIndex + 1} 题 / 共 ${total} 题`;
+  document.getElementById('progress-text').textContent = t('questionProgress', { current: currentIndex + 1, total });
   document.getElementById('progress-fill').style.width = `${pct}%`;
 
   const isFirst = currentIndex === 0;
@@ -173,7 +174,7 @@ async function updateProgress() {
 
   document.getElementById('btn-prev').disabled = isFirst;
   document.getElementById('btn-next').disabled = !hasAnswer;
-  document.getElementById('btn-next').textContent = isLast ? '提交' : '下一题';
+  document.getElementById('btn-next').textContent = isLast ? t('submit') : t('nextQuestion');
 
   updateAnswerSheet();
 }
@@ -264,7 +265,7 @@ async function handleSubmit() {
   const unanswered = items.filter(item => answers[item.q_id] === undefined);
   if (unanswered.length > 0) {
     const qids = unanswered.map(i => i.q_id).join('、');
-    alert(`还有 ${unanswered.length} 题未作答（第 ${qids} 题），请完成所有题目后再提交。`);
+    alert(t('unansweredAlert', { n: unanswered.length, qids }));
     currentIndex = items.indexOf(unanswered[0]);
     renderCurrentQuestion();
     updateProgress();

@@ -1,5 +1,10 @@
 // index.js — 主页
 
+import { t } from './i18n.js';
+
+// 动态设置 lang 属性
+document.documentElement.lang = window.location.pathname.includes('/zh-TW/') ? 'zh-TW' : 'zh-CN';
+
 async function init() {
   if (await checkResume()) return;
   await loadScales();
@@ -90,15 +95,15 @@ function createCard(config) {
 }
 
 function formatRelativeTime(ts) {
-  if (!ts) return '刚刚';
+  if (!ts) return t('timeJustNow');
   const diff = Date.now() - ts;
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return '刚刚';
-  if (minutes < 60) return `${minutes} 分钟前`;
+  if (minutes < 1) return t('timeJustNow');
+  if (minutes < 60) return t('timeMinutesAgo', { n: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} 小时前`;
+  if (hours < 24) return t('timeHoursAgo', { n: hours });
   const days = Math.floor(hours / 24);
-  return `${days} 天前`;
+  return t('timeDaysAgo', { n: days });
 }
 
 function escapeHtml(text) {

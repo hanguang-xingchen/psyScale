@@ -1,6 +1,7 @@
 // scorer.js — 计分引擎
 
 import { loadDraft } from './db.js';
+import { t } from './i18n.js';
 
 export async function score(scaleId, items, config) {
   const draft = await loadDraft(scaleId);
@@ -17,7 +18,7 @@ export async function score(scaleId, items, config) {
     return scoreDimensionSum(answers, items, config);
   }
 
-  throw new Error(`未知计分类型: ${scoringType}`);
+  throw new Error(t('unknownScoring', { type: scoringType }));
 }
 
 function scoreSum(answers, items, config) {

@@ -842,6 +842,33 @@ body {
   }
 }
 
+/* ===== 语言引导 ===== */
+.locale-prompt {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  padding: 4px 16px 0;
+  line-height: 1.8;
+}
+
+.locale-link {
+  color: var(--pink-500);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.locale-link:hover {
+  color: var(--pink-600);
+  text-decoration: underline;
+}
+
+.locale-hint {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 4px;
+}
+
 /* ===== 答题卡（桌面端右侧折叠面板） ===== */
 :root {
   --answer-sheet-w: 330px;

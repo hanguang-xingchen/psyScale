@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="開源,心理量表,心理測評,PHQ-9,GAD-7,SCL-90,免費,開源心理學工具">
+  <meta name="description" content="psyScale — 開源的心理學多量表評估工具，支援 PHQ-9、GAD-7、SCL-90 等量表，即開即用，無需後端。">
+  <title>psyScale — 開源心理學多量表評估</title>
+  <link rel="stylesheet" href="../css/style.css?v=10">
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1> psyScale </h1>
+      <p>開源心理學多量表評估工具</p>
+      <p class="locale-hint">🇹🇼 繁體中文版</p>
+    </div>
+
+    <div id="scale-list">
+      <!-- 動態渲染量表卡片 -->
+    </div>
+
+    <div id="loading" class="empty-state">
+      <div class="empty-state-icon">🌸</div>
+      <p>正在載入量表…</p>
+    </div>
+
+    <div class="social-links">
+      <a href="https://qm.qq.com/q/hxxcsAb5L4" target="_blank" rel="noopener" class="btn btn-social btn-qq">
+        💬 抑鬱症救救群
+      </a>
+      <a href="https://hanguangxingchen.top" target="_blank" rel="noopener" class="btn btn-social btn-author">
+        👤 作者首頁
+      </a>
+      <a href="https://github.com/hanguang-xingchen/psyScale" target="_blank" rel="noopener" class="btn btn-social btn-github">
+        ⭐ Star 程式碼倉庫
+      </a>
+    </div>
+    <div class="star-prompt">⭐ 如果有幫助到你，歡迎在 GitHub 給個 Star</div>
+  </div>
+
+  <dialog id="resume-dialog" class="resume-dialog">
+    <div class="resume-dialog-content">
+      <div class="resume-dialog-icon">📝</div>
+      <p class="resume-dialog-title">你有一個未完成的量表</p>
+      <p class="resume-dialog-desc"><strong id="resume-scale-title"></strong></p>
+      <p class="resume-dialog-time" id="resume-time"></p>
+      <div class="resume-dialog-actions">
+        <button id="btn-abandon" class="btn btn-secondary">放棄</button>
+        <button id="btn-resume" class="btn btn-primary">繼續答題</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="../js/index.js?v=8"></script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 import { drawRadar } from './radar.js';
 import { downloadResult, downloadResultWithDetail, downloadCsvDetail } from './report.js';
 import { loadResult } from './db.js';
+import { t } from './i18n.js';
 
 const params = new URLSearchParams(window.location.search);
 const scaleId = params.get('scale');
@@ -16,8 +17,8 @@ async function init() {
     document.getElementById('result-content').innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">📋</div>
-        <p>暂无结果数据，请先完成量表答题</p>
-        <a href="index.html" class="btn btn-primary btn-mt-lg">去答题</a>
+        <p>${t('noResultText')}</p>
+        <a href="index.html" class="btn btn-primary btn-mt-lg">${t('goToAnswer')}</a>
       </div>
     `;
     return;
@@ -89,15 +90,15 @@ function applyDynamicColors() {
 function renderSingle(data) {
   return `
     <div class="result-card fade-in">
-      <div class="result-label">总分</div>
+      <div class="result-label">${t('totalScore')}</div>
       <div class="result-score result-score-color" data-color="${escapeHtml(data.color)}">${data.totalScore}</div>
       <div class="result-meta">
         <div class="meta-item">
-          <span class="meta-label">题目数</span>
+          <span class="meta-label">${t('totalItems')}</span>
           <span class="meta-value">${data.totalItems}</span>
         </div>
         <div class="meta-item">
-          <span class="meta-label">因子均分</span>
+          <span class="meta-label">${t('meanScore')}</span>
           <span class="meta-value result-score-color" data-color="${escapeHtml(data.color)}">${data.mean}</span>
         </div>
       </div>
@@ -107,7 +108,7 @@ function renderSingle(data) {
       <div class="result-advice">${escapeHtml(data.advice)}</div>
     </div>
     <p class="text-center text-sm text-muted btn-mt-lg">
-      本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
+      ${t('disclaimer')}
     </p>
   `;
 }
@@ -132,18 +133,18 @@ function renderDimensions(data) {
   return `
     <div class="result-overall fade-in">
       <div class="result-overall-info">
-        <div class="result-label">总平均分</div>
+        <div class="result-label">${t('meanScore')}</div>
         <div class="result-score result-score-color" data-color="${escapeHtml(data.overallColor)}">${data.overallMean}</div>
         <div class="result-level result-level-color" data-color="${escapeHtml(data.overallColor)}">
           ${escapeHtml(data.overallLevel)}
         </div>
         <div class="result-meta">
           <div class="meta-item">
-            <span class="meta-label">题目数</span>
+            <span class="meta-label">${t('totalItems')}</span>
             <span class="meta-value">${data.totalItems}</span>
           </div>
           <div class="meta-item">
-            <span class="meta-label">维度数</span>
+            <span class="meta-label">${t('dimCount')}</span>
             <span class="meta-value">${dimCount}</span>
           </div>
         </div>
@@ -157,16 +158,16 @@ function renderDimensions(data) {
       <table class="dimension-table">
         <thead>
           <tr>
-            <th>维度</th>
-            <th class="text-center">因子均分</th>
-            <th class="text-right">等级</th>
+            <th>${t('dimension')}</th>
+            <th class="text-center">${t('meanScore')}</th>
+            <th class="text-right">${t('level')}</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
     <p class="text-center text-sm text-muted btn-mt-lg">
-      本结果仅供参考，不构成医学诊断。如有疑虑请咨询专业人士。
+      ${t('disclaimer')}
     </p>
   `;
 }

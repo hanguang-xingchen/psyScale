@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="開源,心理量表,心理測評,答題">
+  <title>測評須知 — 開源 psyScale</title>
+  <link rel="stylesheet" href="../css/style.css?v=10">
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回首頁</a>
+
+    <div class="page-header">
+      <h1>測評須知</h1>
+      <p id="notice-scale-name">載入中…</p>
+    </div>
+
+    <!-- 儲存狀態 -->
+    <div class="notice-status" id="notice-status"></div>
+    <div class="notice-browser" id="notice-browser"></div>
+
+    <!-- 須知正文 -->
+    <div class="notice-body">
+      <div class="notice-section">
+        <p class="notice-desc">
+          請根據您近期的實際感受如實作答，題目沒有對錯之分。<br>
+          開始答題後請認真完成每一道題目，送出前可以返回修改。
+        </p>
+      </div>
+
+      <div class="notice-section">
+        <div class="notice-subtitle">資料說明</div>
+        <p class="notice-desc">
+          本專案完全在本地瀏覽器中執行，您填寫的所有資料僅儲存在目前裝置上，
+          <strong>不會上傳至任何雲端伺服器</strong>，您的隱私是安全的。
+        </p>
+        <p class="notice-desc">
+          <strong>請注意：資料不會跨裝置同步</strong>，如需儲存結果請自行儲存或匯出報告。
+          更換裝置或清除瀏覽器資料會丟失所有進度與結果。
+        </p>
+      </div>
+
+      <div class="notice-section">
+        <div class="notice-subtitle">第三方平台提示</div>
+        <p class="notice-desc">
+          如果您透過微信、QQ 等第三方應用程式開啟本頁面，為避免功能受限或資料遺失，
+          建議點擊右上角 <strong>"在瀏覽器中開啟"</strong>。
+        </p>
+      </div>
+
+      <div class="notice-section">
+        <div class="notice-subtitle">免責聲明</div>
+        <p class="notice-desc">
+          本工具提供的測評結果僅供參考，<strong>不構成醫學診斷或治療建議</strong>。
+          如果您對自身心理狀態有任何疑慮，請務必諮詢專業醫療機構或心理諮商師。
+        </p>
+        <p class="notice-desc">
+          若處於緊急狀態，請立即撥打心理諮商專線：<strong>1980</strong>（全台心理諮商專線）。
+        </p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full btn-mt-lg" id="btn-start">
+      我已知曉，開始答題
+    </button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const scaleId = params.get('scale');
+
+    if (!scaleId) {
+      window.location.href = 'index.html';
+    }
+
+    // 載入量表名稱
+    (async () => {
+      try {
+        const res = await fetch(`../scales/${scaleId}/basic.json`);
+        const config = await res.json();
+        document.getElementById('notice-scale-name').textContent = config.title;
+      } catch {
+        document.getElementById('notice-scale-name').textContent = scaleId;
+      }
+    })();
+
+    // 偵測 IndexedDB 支援
+    function hasIndexedDB() {
+      try {
+        return !!window.indexedDB;
+      } catch {
+        return false;
+      }
+    }
+
+    function renderStatus() {
+      const el = document.getElementById('notice-status');
+      const supportsDB = hasIndexedDB();
+      if (supportsDB) {
+        el.className = 'notice-status notice-status-ok';
+        el.innerHTML = `
+          <span class="notice-status-icon">✓</span>
+          <span>您的瀏覽器支援本地資料庫，答題進度可隨時儲存和恢復</span>
+        `;
+      } else {
+        el.className = 'notice-status notice-status-warn';
+        el.innerHTML = `
+          <span class="notice-status-icon">⚠</span>
+          <span>您的瀏覽器不支援本地資料庫，無法儲存進度，請一次性完成測評</span>
+        `;
+      }
+    }
+    renderStatus();
+    renderBrowserInfo();
+
+    function getOS(ua) {
+      if (/Windows NT 10/i.test(ua)) return 'Windows 10/11';
+      if (/Windows NT 6\.1/i.test(ua)) return 'Windows 7';
+      if (/Mac OS X ([\d_]+)/i.test(ua)) return 'macOS';
+      if (/Android ([\d.]+)/i.test(ua)) return 'Android ' + ua.match(/Android ([\d.]+)/)[1];
+      if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+      if (/Linux/i.test(ua)) return 'Linux';
+      return '未知作業系統';
+    }
+
+    function renderBrowserInfo() {
+      const el = document.getElementById('notice-browser');
+      const ua = navigator.userAgent;
+      let browser = '';
+      let thirdParty = '';
+
+      if (/MicroMessenger/i.test(ua)) {
+        browser = '微信內建瀏覽器';
+        thirdParty = '微信';
+      } else if (/QQ/i.test(ua) && /MQQBrowser/i.test(ua)) {
+        browser = 'QQ內建瀏覽器';
+        thirdParty = 'QQ';
+      } else if (/Edg\//i.test(ua)) {
+        browser = 'Edge ' + (ua.match(/Edg\/([\d.]+)/) || [,''])[1];
+      } else if (/Chrome\//i.test(ua)) {
+        browser = 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/) || [,''])[1];
+      } else if (/Firefox\//i.test(ua)) {
+        browser = 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/) || [,''])[1];
+      } else if (/Safari\//i.test(ua) && !/Chrome/.test(ua)) {
+        browser = 'Safari ' + (ua.match(/Version\/([\d.]+)/) || [,''])[1];
+      } else {
+        browser = '未知瀏覽器';
+      }
+
+      const os = getOS(ua);
+      let html = `<span class="browser-info-icon">🖥</span> ${browser} · ${os}`;
+      if (thirdParty) {
+        html += ` <span class="browser-warn">（偵測到 ${thirdParty} 內建瀏覽器，建議"在瀏覽器中開啟"）</span>`;
+      }
+      el.innerHTML = html;
+    }
+
+    // 開始答題
+    document.getElementById('btn-start').addEventListener('click', () => {
+      window.location.href = `scale.html?scale=${encodeURIComponent(scaleId)}`;
+    });
+  </script>
+</body>
+</html>

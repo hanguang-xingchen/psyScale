@@ -1,0 +1,29 @@
+{
+  "id": "pss-10",
+  "title": "PSS-10 知覺壓力量表",
+  "titleEn": "Perceived Stress Scale (10-item)",
+  "description": "用於評估個體對生活中壓力源知覺程度的簡短量表，由 Cohen 等人開發",
+  "instruction": "在過去一個月內，你有多頻繁地有以下感受或想法？請選擇最符合你情況的選項。",
+  "author": "Cohen, Kamarck, Mermelstein",
+  "year": 1983,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 13, "level": "低壓力", "color": "#4caf50", "advice": "知覺壓力水平較低，繼續保持良好的應對方式。" },
+    { "min": 14, "max": 26, "level": "中等壓力", "color": "#ff9800", "advice": "知覺壓力處於中等水平，可以嘗試放鬆技巧如深呼吸、冥想等來緩解。" },
+    { "min": 27, "max": 40, "level": "高壓力", "color": "#b71c1c", "advice": "知覺壓力較高，建議調整生活節奏，必要時尋求專業支持。" }
+  ]
+}

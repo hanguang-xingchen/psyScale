@@ -1,0 +1,30 @@
+{
+  "id": "gad-7",
+  "title": "GAD-7 廣泛性焦慮量表",
+  "titleEn": "Generalized Anxiety Disorder 7-item scale",
+  "description": "用於篩檢廣泛性焦慮障礙的簡短自評量表，由 Spitzer 等人於 2006 年開發",
+  "instruction": "在過去兩週內，以下問題困擾您的頻率是？請選擇最符合您情況的選項。",
+  "author": "Spitzer, Kroenke, Williams, Lowe",
+  "year": 2006,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 0, "max": 4, "level": "沒有焦慮", "color": "#4caf50", "advice": "目前沒有明顯焦慮症狀，繼續保持良好的生活狀態。" },
+    { "min": 5, "max": 9, "level": "輕度焦慮", "color": "#ff9800", "advice": "存在輕度焦慮症狀，建議嘗試放鬆技巧如深呼吸、冥想等。" },
+    { "min": 10, "max": 14, "level": "中度焦慮", "color": "#f44336", "advice": "存在中度焦慮症狀，建議諮詢心理健康專業人士。" },
+    { "min": 15, "max": 21, "level": "重度焦慮", "color": "#b71c1c", "advice": "存在重度焦慮症狀，請儘快尋求專業醫療協助。" }
+  ]
+}
