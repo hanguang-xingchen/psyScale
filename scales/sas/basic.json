@@ -1,0 +1,30 @@
+{
+  "id": "sas",
+  "title": "SAS 焦虑自评量表",
+  "titleEn": "Self-Rating Anxiety Scale",
+  "description": "用于评估焦虑症状严重程度的自评量表，由 Zung 于 1971 年编制，广泛用于临床和科研场景",
+  "instruction": "以下描述的是人们有时会有的一些感受。请根据你在过去一周内的实际情况，选择最符合每个感受出现频率的选项。",
+  "author": "Zung",
+  "year": 1971,
+  "language": "zh-CN",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 20, "max": 39, "level": "没有焦虑", "color": "#4caf50", "advice": "目前没有明显焦虑症状，继续保持良好的生活状态。" },
+    { "min": 40, "max": 49, "level": "轻度焦虑", "color": "#ff9800", "advice": "存在轻度焦虑症状，建议关注情绪变化，适当放松和运动。" },
+    { "min": 50, "max": 59, "level": "中度焦虑", "color": "#f44336", "advice": "存在中度焦虑症状，建议尽快咨询心理健康专业人士。" },
+    { "min": 60, "max": 80, "level": "重度焦虑", "color": "#b71c1c", "advice": "存在重度焦虑症状，请立即寻求专业医疗帮助。" }
+  ]
+}
