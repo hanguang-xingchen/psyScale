@@ -4,6 +4,8 @@
 
 **在线体验**：<https://hanguang-xingchen.github.io/psyScale/>
 
+**繁体中文版**：<https://hanguang-xingchen.github.io/psyScale/zh-TW/>
+
 ## 支持量表
 
 | 量表 | 简介 | 题目数 |
