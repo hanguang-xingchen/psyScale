@@ -4,6 +4,8 @@
 
 **在线体验**：<https://hanguang-xingchen.github.io/psyScale/>
 
+> 📢 **项目状态**（2026-10-18）：psyScale 核心功能已开发完成，支持 10 个量表、繁简双语。后续将探索 NT 分支（PyScript 引擎实验）及 Online 版，敬请期待！
+
 ## 支持量表
 
 | 量表 | 简介 | 题目数 |
