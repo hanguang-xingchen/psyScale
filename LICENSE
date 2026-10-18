@@ -31,11 +31,27 @@ and/or modify the software.
 
   A secondary benefit of defending all users' freedom is that
 improvements made in alternate versions of the program, if they
-spread widely enough, will prepare the way for new versions of all
-software.  Furthermore, developers of the GNU General Public License
-have used the "Affero" clause to address the situation where software
-is run on a network server, which would otherwise not require the
-source code to be made available to users of that server.
+receive widespread use, become available for other developers to
+incorporate.  Many developers of free software are heartened and
+encouraged by the resulting cooperation.  However, in the case of
+software used on network servers, this result may fail to come about.
+The GNU General Public License permits making a modified version and
+letting the public access it on a server without ever releasing its
+source code to the public.
+
+  The GNU Affero General Public License is designed specifically to
+ensure that, in such cases, the modified source code becomes available
+to the community.  It requires the operator of a network server to
+provide the source code of the modified version running there to the
+users of that server.  Therefore, public use of a modified version, on
+a publicly accessible server, gives the public access to the source
+code of the modified version.
+
+  An older license, called the Affero General Public License and
+published by Affero, was designed to accomplish similar goals.  This is
+a different license, not a version of the Affero GPL, but Affero has
+released a new version of the Affero GPL which permits relicensing under
+this license.
 
   The precise terms and conditions for copying, distribution and
 modification follow.
@@ -188,8 +204,8 @@ terms of section 4, provided that you also meet all of these conditions:
 
     b) The work must carry prominent notices stating that it is
     released under this License and any conditions added under section
-    7.  This requirement modifies the requirement in section 4 of the
-    GNU General Public License.
+    7.  This requirement modifies the requirement in section 4 to
+    "keep intact all notices".
 
     c) You must license the entire work, as a whole, under this
     License to anyone who comes into possession of a copy.  This
@@ -611,7 +627,7 @@ free software which everyone can redistribute and change under these terms.
   To do so, attach the following notices to the program.  It is safest
 to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
-the "copyright" line and a pointer to where the full notice is stored.
+the "copyright" line and a pointer to where the full notice is found.
 
     <one line to give the program's name and a brief idea of what it does.>
     Copyright (C) <year>  <name of author>
@@ -633,8 +649,8 @@ Also add information on how to contact you by electronic and paper mail.
 
   If your software can interact with users remotely through a computer
 network, you should also make sure that it provides a way for users to
-obtain its source code.  For example, if your program is a web application,
-its interface could display a "Source" link that leads users to an archive
+get its source.  For example, if your program is a web application, its
+interface could display a "Source" link that leads users to an archive
 of the code.  There are many ways you could offer source, and different
 solutions will be better for different programs; see section 13 for the
 specific requirements.

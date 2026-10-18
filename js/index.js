@@ -52,7 +52,7 @@ async function loadScales() {
 
   let scaleIds;
   try {
-    const indexRes = await fetch('scales/index.json');
+    const indexRes = await fetch(`scales/index.json?t=${Date.now()}`);
     scaleIds = await indexRes.json();
   } catch {
     scaleIds = ['phq-9', 'gad-7', 'scl-90'];
