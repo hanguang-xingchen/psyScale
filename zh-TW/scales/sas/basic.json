@@ -1,0 +1,30 @@
+{
+  "id": "sas",
+  "title": "SAS 焦慮自評量表",
+  "titleEn": "Self-Rating Anxiety Scale",
+  "description": "用於評估焦慮症狀嚴重程度的自評量表，由 Zung 於 1971 年編製，廣泛用於臨床和科研場景",
+  "instruction": "以下描述的是人們有時會有的一些感受。請根據你在過去一週內的實際情況，選擇最符合每個感受出現頻率的答案。",
+  "author": "Zung",
+  "year": 1971,
+  "language": "zh-TW",
+
+  "source": {
+    "type": "csv",
+    "file": "items.csv",
+    "optionPrefix": "opt_",
+    "valuePrefix": "val_",
+    "dimensions": false
+  },
+
+  "scoring": {
+    "type": "sum",
+    "missingValuePolicy": "warn"
+  },
+
+  "interpretation": [
+    { "min": 20, "max": 39, "level": "沒有焦慮", "color": "#4caf50", "advice": "目前沒有明顯焦慮症狀，繼續保持良好的生活狀態。" },
+    { "min": 40, "max": 49, "level": "輕度焦慮", "color": "#ff9800", "advice": "存在輕度焦慮症狀，建議關注情緒變化，適當放鬆和運動。" },
+    { "min": 50, "max": 59, "level": "中度焦慮", "color": "#f44336", "advice": "存在中度焦慮症狀，建議盡快諮詢心理健康專業人士。" },
+    { "min": 60, "max": 80, "level": "重度焦慮", "color": "#b71c1c", "advice": "存在重度焦慮症狀，請立即尋求專業醫療協助。" }
+  ]
+}
